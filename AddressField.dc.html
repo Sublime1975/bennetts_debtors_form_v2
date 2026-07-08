@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<div style="position:relative">
+  <label style="display:block" for="{{ fieldId }}">
+    <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.03em;color:#A8A29E">{{ label }}<sc-if value="{{ required }}" hint-placeholder-val="{{ false }}"><span style="color:#E3B679"> *</span></sc-if></span>
+    <span style="position:relative;margin-top:8px;display:block">
+      <input id="{{ fieldId }}" type="text" autocomplete="off" placeholder="{{ placeholder }}" value="{{ value }}" onChange="{{ handleChange }}" onFocus="{{ handleFocus }}" style="{{ inputStyle }}" />
+      <svg style="pointer-events:none;position:absolute;right:16px;top:50%;transform:translateY(-50%);width:16px;height:16px" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+        <path d="M10 2c-3.31 0-6 2.69-6 6 0 4.5 6 10 6 10s6-5.5 6-10c0-3.31-2.69-6-6-6z" stroke="#A8A29E" stroke-width="1.4" stroke-linejoin="round"></path>
+        <circle cx="10" cy="8" r="2" stroke="#A8A29E" stroke-width="1.4"></circle>
+      </svg>
+    </span>
+  </label>
+  <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+    <span style="margin-top:6px;display:block;font-size:12px;color:#f87171;font-family:'Poppins',sans-serif">{{ error }}</span>
+  </sc-if>
+  <sc-if value="{{ showDropdown }}" hint-placeholder-val="{{ false }}">
+    <ul style="position:absolute;z-index:20;margin-top:4px;width:100%;border-radius:12px;overflow:hidden;max-height:224px;overflow-y:auto;list-style:none;padding:0;background:#1C1B19;border:1px solid rgba(255,255,255,0.1);box-shadow:0 10px 30px -10px rgba(0,0,0,0.7)">
+      <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+        <li style="padding:10px 16px;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">Searching…</li>
+      </sc-if>
+      <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="0">
+        <li>
+          <button type="button" onClick="{{ s.select }}" style="width:100%;text-align:left;padding:10px 16px;font-family:'Poppins',sans-serif;font-size:14px;background:none;border:none;cursor:pointer;color:#FAFAF8">{{ s.display_name }}</button>
+        </li>
+      </sc-for>
+    </ul>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:380,&quot;height&quot;:90},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Address&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;value&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(v:string)=&gt;void&quot;},&quot;error&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;required&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Start typing your street address…&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;countryCode&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;za&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { suggestions: [], open: false, loading: false };
+  debounceTimer = null;
+
+  handleChange = (e) => {
+    const val = e.target.value;
+    if (this.props.onChange) this.props.onChange(val);
+    this.setState({ open: true });
+    this.scheduleSearch(val);
+  };
+
+  handleFocus = () => { this.setState({ open: true }); };
+
+  scheduleSearch(value) {
+    if (this.debounceTimer) clearTimeout(this.debounceTimer);
+    if (!value || value.trim().length < 4) {
+      this.setState({ suggestions: [] });
+      return;
+    }
+    this.debounceTimer = setTimeout(() => {
+      this.setState({ loading: true });
+      const params = new URLSearchParams({ format: 'json', addressdetails: '0', limit: '5', q: value });
+      if (this.props.countryCode) params.set('countrycodes', this.props.countryCode);
+      fetch('https://nominatim.openstreetmap.org/search?' + params.toString())
+        .then((res) => (res.ok ? res.json() : []))
+        .then((data) => this.setState({ suggestions: Array.isArray(data) ? data : [] }))
+        .catch(() => this.setState({ suggestions: [] }))
+        .finally(() => this.setState({ loading: false }));
+    }, 400);
+  }
+
+  selectSuggestion(name) {
+    if (this.props.onChange) this.props.onChange(name);
+    this.setState({ suggestions: [], open: false });
+  }
+
+  renderVals() {
+    const error = this.props.error;
+    const inputStyle = `width:100%;font-family:'Poppins',sans-serif;font-size:14px;border-radius:12px;padding:12px 40px 12px 16px;outline:none;box-sizing:border-box;background:rgba(255,255,255,0.04);border:1px solid ${error ? '#f87171' : 'rgba(255,255,255,0.08)'};color:#FAFAF8`;
+    const suggestions = (this.state.suggestions || []).map((s) => ({
+      place_id: s.place_id,
+      display_name: s.display_name,
+      select: () => this.selectSuggestion(s.display_name),
+    }));
+    return {
+      label: this.props.label,
+      required: !!this.props.required,
+      value: this.props.value ?? '',
+      placeholder: this.props.placeholder ?? '',
+      fieldId: this.props.id ?? ('addr' + Math.random().toString(36).slice(2)),
+      error: error ?? '',
+      inputStyle,
+      handleChange: this.handleChange,
+      handleFocus: this.handleFocus,
+      showDropdown: this.state.open && (this.state.loading || suggestions.length > 0),
+      loading: this.state.loading,
+      suggestions,
+    };
+  }
+}
+</script>
+</body>
+</html>

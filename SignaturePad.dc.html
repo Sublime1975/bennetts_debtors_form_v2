@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<div>
+  <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.03em;color:#A8A29E">{{ label }}<sc-if value="{{ required }}" hint-placeholder-val="{{ false }}"><span style="color:#E3B679"> *</span></sc-if></span>
+  <div style="{{ padStyle }}">
+    <sc-if value="{{ hasSignature }}" hint-placeholder-val="{{ false }}">
+      <span style="position:absolute;top:10px;left:14px;font-family:'Lora',serif;font-style:italic;font-size:12px;color:#6b6862;pointer-events:none">Sign here</span>
+    </sc-if>
+    <canvas ref="{{ canvasRef }}" width="{{ canvasWidth }}" height="{{ canvasHeight }}" onPointerDown="{{ onPointerDown }}" onPointerMove="{{ onPointerMove }}" onPointerUp="{{ onPointerUp }}" onPointerLeave="{{ onPointerUp }}" style="display:block;width:100%;height:{{ canvasHeight }}px;touch-action:none;cursor:crosshair;border-radius:14px"></canvas>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+    <span style="font-family:'Poppins',sans-serif;font-size:11px;color:#A8A29E">Draw with your mouse, finger or stylus</span>
+    <button type="button" onClick="{{ clear }}" style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;color:#E3B679;background:none;border:none;cursor:pointer;padding:0">Clear</button>
+  </div>
+  <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+    <span style="margin-top:6px;display:block;font-size:12px;color:#f87171;font-family:'Poppins',sans-serif">{{ error }}</span>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:210},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Signature&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;value&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;string|null&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(dataUrl:string|null)=&gt;void&quot;},&quot;error&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;required&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  canvasRef = React.createRef();
+  drawing = false;
+  last = null;
+
+  componentDidMount() {
+    this.ctx = this.canvasRef.current.getContext('2d');
+    this.ctx.lineWidth = 2.2;
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
+    this.ctx.strokeStyle = '#FAFAF8';
+    this.restoreFromValue();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.value && !this.props.value) this.restoreFromValue();
+  }
+
+  restoreFromValue() {
+    if (!this.props.value) return;
+    const img = new Image();
+    img.onload = () => { if (this.ctx) this.ctx.drawImage(img, 0, 0, this.canvasRef.current.width, this.canvasRef.current.height); };
+    img.src = this.props.value;
+  }
+
+  getPoint(e) {
+    const rect = this.canvasRef.current.getBoundingClientRect();
+    const scaleX = this.canvasRef.current.width / rect.width;
+    const scaleY = this.canvasRef.current.height / rect.height;
+    return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+  }
+
+  onPointerDown = (e) => {
+    e.preventDefault();
+    this.drawing = true;
+    this.last = this.getPoint(e);
+  };
+  onPointerMove = (e) => {
+    if (!this.drawing || !this.ctx) return;
+    e.preventDefault();
+    const p = this.getPoint(e);
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.last.x, this.last.y);
+    this.ctx.lineTo(p.x, p.y);
+    this.ctx.stroke();
+    this.last = p;
+  };
+  onPointerUp = () => {
+    if (!this.drawing) return;
+    this.drawing = false;
+    if (this.props.onChange && this.canvasRef.current) this.props.onChange(this.canvasRef.current.toDataURL('image/png'));
+  };
+  clear = () => {
+    if (this.ctx && this.canvasRef.current) this.ctx.clearRect(0, 0, this.canvasRef.current.width, this.canvasRef.current.height);
+    if (this.props.onChange) this.props.onChange(null);
+  };
+
+  renderVals() {
+    const error = this.props.error;
+    const canvasHeight = this.props.height ?? 140;
+    const canvasWidth = this.props.width ?? 640;
+    const padStyle = `position:relative;margin-top:8px;border-radius:14px;background:rgba(255,255,255,0.03);border:1.5px dashed ${error ? '#f87171' : 'rgba(201,134,63,0.35)'};overflow:hidden`;
+    return {
+      label: this.props.label,
+      required: !!this.props.required,
+      error: error ?? '',
+      canvasRef: this.canvasRef,
+      canvasWidth,
+      canvasHeight,
+      hasSignature: !this.props.value,
+      padStyle,
+      onPointerDown: this.onPointerDown,
+      onPointerMove: this.onPointerMove,
+      onPointerUp: this.onPointerUp,
+      clear: this.clear,
+    };
+  }
+}
+</script>
+</body>
+</html>

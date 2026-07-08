@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&amp;family=Poppins:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+    body { margin:0; background:#141413; }
+    @keyframes logo-pulse {
+      0%, 100% { opacity:0.5; transform:scale(0.92); }
+      50% { opacity:1; transform:scale(1.05); }
+    }
+    input::placeholder, textarea::placeholder { color:#6b6862; }
+    select option { background:#1C1B19; }
+  </style>
+</helmet>
+<div style="position:relative;min-height:100vh;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 16px;background:#141413;box-sizing:border-box;overflow:hidden" data-screen-label="Debtor Application Wizard">
+  <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
+    <div style="position:absolute;top:-128px;left:50%;transform:translateX(-50%);width:600px;height:600px;border-radius:9999px;opacity:0.15;filter:blur(120px);background:#C9863F"></div>
+    <div style="position:absolute;bottom:0;right:0;width:400px;height:400px;border-radius:9999px;opacity:0.08;filter:blur(100px);background:#E3B679"></div>
+  </div>
+
+  <sc-if value="{{ isWelcome }}" hint-placeholder-val="{{ true }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Welcome">
+    <div style="width:100%;max-width:448px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:448px;border-radius:24px;padding:40px;box-sizing:border-box;overflow:hidden;text-align:center;background:linear-gradient(160deg,#1C1B19,#17140F);border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.06" aria-hidden="true">
+        <defs>
+          <pattern id="bp-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+            <path d="M 28 0 L 0 0 0 28" fill="none" stroke="#E3B679" stroke-width="0.6"></path>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bp-grid)"></rect>
+      </svg>
+      <div style="position:absolute;inset:12px;pointer-events:none">
+        <div style="position:absolute;width:24px;height:24px;top:0;left:0;border-top:2px solid #C9863F;border-left:2px solid #C9863F;border-top-left-radius:4px"></div>
+        <div style="position:absolute;width:24px;height:24px;top:0;right:0;border-top:2px solid #C9863F;border-right:2px solid #C9863F;border-top-right-radius:4px"></div>
+        <div style="position:absolute;width:24px;height:24px;bottom:0;left:0;border-bottom:2px solid #C9863F;border-left:2px solid #C9863F;border-bottom-left-radius:4px"></div>
+        <div style="position:absolute;width:24px;height:24px;bottom:0;right:0;border-bottom:2px solid #C9863F;border-right:2px solid #C9863F;border-bottom-right-radius:4px"></div>
+      </div>
+      <div style="position:relative;z-index:10;display:flex;flex-direction:column;align-items:center;padding:24px 0">
+        <div style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;padding:4px 12px;border-radius:9999px;margin-bottom:24px;background:#C9863F1A;color:#E3B679;border:1px solid #C9863F44">Est. 1957</div>
+        <h1 style="font-family:'Lora',serif;font-size:30px;line-height:1.2;margin:0 0 12px;color:#FAFAF8">Debtor<br>Application</h1>
+        <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 40px;max-width:280px;color:#A8A29E">Open a credit account with Bennett's Engineering - a trusted engineering partner since 1957. Tell us about your business to get started.</p>
+        <button onClick="{{ goNext }}" style="width:100%;font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66;box-sizing:border-box">Start application</button>
+        <p style="font-family:'Poppins',sans-serif;font-size:11px;margin:20px 0 0;color:#A8A29E">Takes about 10 minutes</p>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isCompany }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Company details">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+        <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="{{ p.barStyle }}"></div>
+            <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Company details</h2>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">Tell us about the business applying for credit.</p>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <dc-import name="FormField" label="Trading name" required="{{ true }}" placeholder="e.g. SGA Fabrication" value="{{ company.tradingName }}" onChange="{{ companyTradingNameChange }}" error="{{ errors.tradingName }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Registered company name (if different from trading name)" placeholder="Leave blank if same as above" value="{{ company.registeredName }}" onChange="{{ companyRegisteredNameChange }}" hint-size="100%,86px"></dc-import>
+        <div>
+          <dc-import name="FormField" label="Website" placeholder="www.sgafabrication.co.za" value="{{ company.website }}" onChange="{{ companyWebsiteChange }}" hint-size="100%,86px"></dc-import>
+          <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">Leave blank if no website</p>
+        </div>
+        <dc-import name="ToggleField" label="Local or foreign entity?" required="{{ true }}" trueLabel="Foreign" falseLabel="Local" value="{{ company.isForeignEntity }}" onChange="{{ companyIsForeignChange }}" error="{{ errors.isForeignEntity }}" hint-size="100%,86px"></dc-import>
+        <sc-if value="{{ companyForeignTrue }}" hint-placeholder-val="{{ false }}">
+          <dc-import name="SelectField" label="Country of registration" required="{{ true }}" placeholder="Select country" options="{{ countriesNoSA }}" value="{{ company.countryOfRegistration }}" onChange="{{ companyCountryOfRegChange }}" error="{{ errors.countryOfRegistration }}" hint-size="100%,86px"></dc-import>
+          <dc-import name="SelectField" label="Entity type" required="{{ true }}" placeholder="Select entity type" options="{{ entityOptions }}" value="{{ company.entityType }}" onChange="{{ companyEntityTypeChange }}" error="{{ errors.entityType }}" hint-size="100%,86px"></dc-import>
+          <dc-import name="FormField" label="Foreign registration number" required="{{ true }}" value="{{ company.foreignRegistrationNumber }}" onChange="{{ companyForeignRegNumberChange }}" error="{{ errors.foreignRegistrationNumber }}" hint-size="100%,86px"></dc-import>
+        </sc-if>
+        <sc-if value="{{ companyForeignFalse }}" hint-placeholder-val="{{ false }}">
+          <dc-import name="SelectField" label="Entity type" required="{{ true }}" placeholder="Select entity type" options="{{ entityOptions }}" value="{{ company.entityType }}" onChange="{{ companyEntityTypeChange }}" error="{{ errors.entityType }}" hint-size="100%,86px"></dc-import>
+          <div>
+            <dc-import name="FormField" label="{{ regNumberLabel }}" required="{{ true }}" placeholder="{{ regNumberPlaceholder }}" value="{{ company.cipcNumber }}" onChange="{{ companyCipcNumberChange }}" error="{{ errors.cipcNumber }}" hint-size="100%,86px"></dc-import>
+            <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">{{ regNumberHelper }}</p>
+          </div>
+        </sc-if>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleNextCompany }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Contact details">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+        <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="{{ p.barStyle }}"></div>
+            <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Contact details</h2>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">Who should we speak to about this application?</p>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <p style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin:0;color:#FAFAF8">Accounts Payable contact</p>
+        <dc-import name="FormField" label="Accounts Payable contact name" required="{{ true }}" placeholder="Full name" value="{{ contact.accountsContactName }}" onChange="{{ contactAccountsNameChange }}" error="{{ errors.accountsContactName }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Accounts Payable email address" type="email" required="{{ true }}" placeholder="name@company.co.za" value="{{ contact.accountsEmail }}" onChange="{{ contactAccountsEmailChange }}" error="{{ errors.accountsEmail }}" hint-size="100%,86px"></dc-import>
+        <div style="display:flex;gap:16px">
+          <dc-import name="FormField" label="Accounts Payable office number" type="tel" required="{{ true }}" placeholder="082 000 0000 or +27 82 000 0000" value="{{ contact.accountsPhone }}" onChange="{{ contactAccountsPhoneChange }}" onBlur="{{ contactAccountsPhoneBlur }}" error="{{ errors.accountsPhone }}" style="flex:1;min-width:0" hint-size="100%,86px"></dc-import>
+          <dc-import name="FormField" label="Accounts Payable cell number" type="tel" placeholder="082 123 4567" value="{{ contact.accountsCell }}" onChange="{{ contactAccountsCellChange }}" onBlur="{{ contactAccountsCellBlur }}" error="{{ errors.accountsCell }}" style="flex:1;min-width:0" hint-size="100%,86px"></dc-import>
+        </div>
+        <dc-import name="AddressField" id="accountsPhysicalAddress" label="Accounts Payable physical address" required="{{ true }}" placeholder="Start typing your street address…" value="{{ contact.accountsPhysicalAddress }}" onChange="{{ contactAccountsPhysicalAddressChange }}" error="{{ errors.accountsPhysicalAddress }}" countryCode="{{ contactCountryCode }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="SelectField" label="Country" required="{{ true }}" placeholder="Select country" options="{{ countries }}" value="{{ contact.country }}" onChange="{{ contactCountryChange }}" error="{{ errors.country }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="CheckboxField" label="Postal address same as physical" checked="{{ contact.accountsPostalSameAsPhysical }}" onChange="{{ contactAccountsPostalSameChange }}" hint-size="100%,46px"></dc-import>
+        <sc-if value="{{ contactAccountsPostalDifferent }}" hint-placeholder-val="{{ false }}">
+          <dc-import name="AddressField" id="accountsPostalAddress" label="Postal address" value="{{ contact.accountsPostalAddress }}" onChange="{{ contactAccountsPostalAddressChange }}" countryCode="{{ contactCountryCode }}" hint-size="100%,86px"></dc-import>
+        </sc-if>
+        <dc-import name="CheckboxField" label="Buyer/Procurement contact is different from above" checked="{{ contact.buyerContactDifferent }}" onChange="{{ contactBuyerDifferentChange }}" hint-size="100%,46px"></dc-import>
+        <sc-if value="{{ contact.buyerContactDifferent }}" hint-placeholder-val="{{ false }}">
+          <p style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin:4px 0 0;color:#FAFAF8">Buyer/Procurement contact</p>
+          <dc-import name="FormField" label="Buyer/Procurement contact name" required="{{ true }}" value="{{ contact.buyerContactName }}" onChange="{{ contactBuyerNameChange }}" error="{{ errors.buyerContactName }}" hint-size="100%,86px"></dc-import>
+          <dc-import name="FormField" label="Buyer/Procurement contact email" type="email" required="{{ true }}" value="{{ contact.buyerEmail }}" onChange="{{ contactBuyerEmailChange }}" error="{{ errors.buyerEmail }}" hint-size="100%,86px"></dc-import>
+          <div style="display:flex;gap:16px">
+            <dc-import name="FormField" label="Buyer/Procurement contact phone" type="tel" required="{{ true }}" placeholder="011 000 0000 or +27 11 000 0000" value="{{ contact.buyerPhone }}" onChange="{{ contactBuyerPhoneChange }}" onBlur="{{ contactBuyerPhoneBlur }}" error="{{ errors.buyerPhone }}" style="flex:1;min-width:0" hint-size="100%,86px"></dc-import>
+            <dc-import name="FormField" label="Buyer/Procurement cell number" type="tel" placeholder="082 123 4567" value="{{ contact.buyerCell }}" onChange="{{ contactBuyerCellChange }}" onBlur="{{ contactBuyerCellBlur }}" error="{{ errors.buyerCell }}" style="flex:1;min-width:0" hint-size="100%,86px"></dc-import>
+          </div>
+        </sc-if>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleNextContact }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isDirectors }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Directors and members">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+        <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="{{ p.barStyle }}"></div>
+            <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Directors &amp; members</h2>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">Full details of each director, member or proprietor of the business.</p>
+      <div style="display:flex;flex-direction:column;gap:32px">
+        <sc-for list="{{ directorsView }}" as="d" hint-placeholder-count="1">
+          <div style="border-radius:16px;padding:20px;box-sizing:border-box;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+              <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;color:#A8A29E">{{ d.label }}</span>
+              <sc-if value="{{ d.showRemove }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ d.remove }}" style="font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E;background:none;border:none;cursor:pointer">Remove</button>
+              </sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <dc-import name="FormField" label="Full name" required="{{ true }}" value="{{ d.fullName }}" onChange="{{ d.fullNameChange }}" error="{{ d.fullNameError }}" hint-size="100%,86px"></dc-import>
+              <dc-import name="FormField" label="SA ID number" required="{{ true }}" inputMode="numeric" placeholder="13 digits" value="{{ d.idNumber }}" onChange="{{ d.idNumberChange }}" error="{{ d.idNumberError }}" hint-size="100%,86px"></dc-import>
+              <dc-import name="AddressField" id="{{ d.addressFieldId }}" label="Residential address" required="{{ true }}" value="{{ d.residentialAddress }}" onChange="{{ d.residentialAddressChange }}" error="{{ d.residentialAddressError }}" countryCode="za" hint-size="100%,86px"></dc-import>
+              <dc-import name="FileDropzone" id="{{ d.idFieldId }}" label="ID document (ID book or Smart ID card)" required="{{ true }}" value="{{ d.idDocument }}" onChange="{{ d.idDocumentChange }}" error="{{ d.idDocumentError }}" hint-size="100%,150px"></dc-import>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <button onClick="{{ addDirector }}" style="margin-top:20px;font-family:'Poppins',sans-serif;font-size:14px;border-radius:9999px;padding:10px 20px;background:rgba(255,255,255,0.05);color:#E3B679;border:1px solid #C9863F44;cursor:pointer">+ Add another director</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleNextDirectors }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isReferences }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Trade references">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+        <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="{{ p.barStyle }}"></div>
+            <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Trade references</h2>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">Two of your existing suppliers who can vouch for this business.</p>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <p style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin:0;color:#FAFAF8">Trade reference 1</p>
+        <dc-import name="FormField" label="Company name" required="{{ true }}" value="{{ references.tradeRef1.companyName }}" onChange="{{ ref1CompanyNameChange }}" error="{{ errors['tradeRef1.companyName'] }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Contact person" required="{{ true }}" value="{{ references.tradeRef1.contactPerson }}" onChange="{{ ref1ContactPersonChange }}" error="{{ errors['tradeRef1.contactPerson'] }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Phone" type="tel" required="{{ true }}" value="{{ references.tradeRef1.phone }}" onChange="{{ ref1PhoneChange }}" error="{{ errors['tradeRef1.phone'] }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Email" type="email" required="{{ true }}" value="{{ references.tradeRef1.email }}" onChange="{{ ref1EmailChange }}" error="{{ errors['tradeRef1.email'] }}" hint-size="100%,86px"></dc-import>
+        <p style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;font-weight:600;margin:12px 0 0;color:#FAFAF8">Trade reference 2</p>
+        <dc-import name="FormField" label="Company name" required="{{ true }}" value="{{ references.tradeRef2.companyName }}" onChange="{{ ref2CompanyNameChange }}" error="{{ errors['tradeRef2.companyName'] }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Contact person" required="{{ true }}" value="{{ references.tradeRef2.contactPerson }}" onChange="{{ ref2ContactPersonChange }}" error="{{ errors['tradeRef2.contactPerson'] }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Phone" type="tel" required="{{ true }}" value="{{ references.tradeRef2.phone }}" onChange="{{ ref2PhoneChange }}" error="{{ errors['tradeRef2.phone'] }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Email" type="email" required="{{ true }}" value="{{ references.tradeRef2.email }}" onChange="{{ ref2EmailChange }}" error="{{ errors['tradeRef2.email'] }}" hint-size="100%,86px"></dc-import>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleNextReferences }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isTax }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Tax and compliance">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+        <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="{{ p.barStyle }}"></div>
+            <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Tax &amp; compliance</h2>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">Your income tax registration and B-BBEE status.</p>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <dc-import name="ToggleField" label="VAT registered?" required="{{ true }}" value="{{ tax.vatRegistered }}" onChange="{{ taxVatRegisteredChange }}" error="{{ errors.vatRegistered }}" hint-size="100%,86px"></dc-import>
+        <sc-if value="{{ tax.vatRegistered }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <dc-import name="FormField" label="VAT number" required="{{ true }}" placeholder="e.g. 4123456789" value="{{ tax.vatNumber }}" onChange="{{ taxVatNumberChange }}" error="{{ errors.vatNumber }}" hint-size="100%,86px"></dc-import>
+            <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">10 digits, always starts with 4</p>
+          </div>
+        </sc-if>
+        <div>
+          <dc-import name="FormField" label="Income tax number" required="{{ true }}" placeholder="e.g. 0123456789" value="{{ tax.incomeTaxNumber }}" onChange="{{ taxIncomeTaxNumberChange }}" error="{{ errors.incomeTaxNumber }}" hint-size="100%,86px"></dc-import>
+          <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">10 digits, starts with 0, 1, 2, 3 or 9</p>
+        </div>
+        <dc-import name="SelectField" label="B-BBEE level" required="{{ true }}" placeholder="Select B-BBEE level" options="{{ bbeeLevels }}" value="{{ tax.bbeeLevel }}" onChange="{{ taxBbeeLevelChange }}" error="{{ errors.bbeeLevel }}" hint-size="100%,86px"></dc-import>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleNextTax }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isBanking }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Banking details">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+        <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="{{ p.barStyle }}"></div>
+            <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Banking details</h2>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">Your bank account information for our records.</p>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <dc-import name="CheckboxField" label="My bank account is outside South Africa" checked="{{ banking.isForeignBank }}" onChange="{{ bankingIsForeignChange }}" hint-size="100%,46px"></dc-import>
+        <dc-import name="FormField" label="Account holder name" required="{{ true }}" placeholder="Name as it appears on the account" value="{{ banking.accountHolder }}" onChange="{{ bankingAccountHolderChange }}" error="{{ errors.accountHolder }}" hint-size="100%,86px"></dc-import>
+        <sc-if value="{{ banking.isForeignBank }}" hint-placeholder-val="{{ false }}">
+          <div>
+            <dc-import name="ForeignBankField" label="Bank name" required="{{ true }}" placeholder="e.g. Barclays, HSBC, Deutsche Bank" value="{{ banking.bankName }}" onChange="{{ bankingBankNameChange }}" onSelectBank="{{ bankingSelectForeignSwift }}" error="{{ errors.bankName }}" hint-size="100%,86px"></dc-import>
+            <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">Autofills SWIFT/BIC for major international banks — unlike SA branch codes there's no single universal standard, so double-check against your bank statement.</p>
+          </div>
+          <dc-import name="SelectField" label="Bank country" required="{{ true }}" placeholder="Select bank country" options="{{ countries }}" value="{{ banking.bankCountry }}" onChange="{{ bankingBankCountryChange }}" error="{{ errors.bankCountry }}" hint-size="100%,86px"></dc-import>
+          <div>
+            <dc-import name="FormField" label="IBAN / Account number" required="{{ true }}" placeholder="e.g. GB29 NWBK 6016 1331 9268 19" value="{{ banking.accountNumber }}" onChange="{{ bankingAccountNumberChange }}" error="{{ errors.accountNumber }}" hint-size="100%,86px"></dc-import>
+            <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">Enter your IBAN where applicable, or your account number</p>
+          </div>
+          <div>
+            <dc-import name="FormField" label="SWIFT / BIC code" required="{{ true }}" placeholder="e.g. FIRNZAJJ or FIRNZAJJXXX" value="{{ banking.swiftCode }}" onChange="{{ bankingSwiftCodeChange }}" error="{{ errors.swiftCode }}" hint-size="100%,86px"></dc-import>
+            <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">8 or 11 character code found on your bank statement</p>
+          </div>
+          <dc-import name="FormField" label="Bank address (optional)" value="{{ banking.bankAddress }}" onChange="{{ bankingBankAddressChange }}" hint-size="100%,86px"></dc-import>
+        </sc-if>
+        <sc-if value="{{ bankingIsLocal }}" hint-placeholder-val="{{ true }}">
+          <dc-import name="BankNameField" label="Bank name" required="{{ true }}" placeholder="Start typing bank name…" value="{{ banking.bankName }}" onChange="{{ bankingBankNameChange }}" onSelectBank="{{ bankingSelectBank }}" error="{{ errors.bankName }}" hint-size="100%,86px"></dc-import>
+          <div>
+            <dc-import name="FormField" label="Branch code" required="{{ true }}" placeholder="6 digits, e.g. 250655" value="{{ banking.branchCode }}" onChange="{{ bankingBranchCodeChange }}" error="{{ errors.branchCode }}" hint-size="100%,86px"></dc-import>
+            <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">Universal branch code from your bank statement</p>
+          </div>
+          <div>
+            <dc-import name="FormField" label="Account number" required="{{ true }}" placeholder="Digits only" value="{{ banking.accountNumber }}" onChange="{{ bankingAccountNumberChange }}" error="{{ errors.accountNumber }}" hint-size="100%,86px"></dc-import>
+            <p style="margin:6px 0 0;font-family:'Poppins',sans-serif;font-size:12px;color:#A8A29E">6-16 digits</p>
+          </div>
+          <dc-import name="SelectField" label="Account type" required="{{ true }}" placeholder="Select account type" options="{{ accountTypes }}" value="{{ banking.accountType }}" onChange="{{ bankingAccountTypeChange }}" error="{{ errors.accountType }}" hint-size="100%,86px"></dc-import>
+        </sc-if>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleNextBanking }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isDocuments }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Document uploads">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px">
+      <svg style="position:absolute;top:-16px;right:-16px;z-index:0;width:120px;height:120px;opacity:0.35" aria-hidden="true">
+        <defs>
+          <pattern id="laser-dots" width="14" height="14" patternUnits="userSpaceOnUse">
+            <circle cx="2" cy="2" r="1.2" fill="#C9863F"></circle>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#laser-dots)"></rect>
+      </svg>
+      <div style="position:relative;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+          <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="{{ p.barStyle }}"></div>
+              <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Document uploads</h2>
+        <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">PDF, JPG or PNG — max 10MB each.</p>
+        <div style="display:flex;flex-direction:column;gap:20px">
+          <dc-import name="FileDropzone" id="cipcCertificate" label="Company Registration Certificate (CIPC)" required="{{ cipcRequired }}" value="{{ documents.cipcCertificate }}" onChange="{{ docCipcChange }}" error="{{ errors.cipcCertificate }}" hint-size="100%,150px"></dc-import>
+          <sc-if value="{{ tax.vatRegistered }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="FileDropzone" id="vatCertificate" label="VAT Certificate" required="{{ true }}" value="{{ documents.vatCertificate }}" onChange="{{ docVatChange }}" error="{{ errors.vatCertificate }}" hint-size="100%,150px"></dc-import>
+          </sc-if>
+          <sc-if value="{{ tax.vatRegistered }}" hint-placeholder-val="{{ false }}">
+            <dc-import name="FileDropzone" id="vatNoticeOfRegistration" label="VAT Notice of Registration" required="{{ true }}" value="{{ documents.vatNoticeOfRegistration }}" onChange="{{ docVatNoticeChange }}" error="{{ errors.vatNoticeOfRegistration }}" hint-size="100%,150px"></dc-import>
+          </sc-if>
+          <sc-if value="{{ tax.vatRegistered }}" hint-placeholder-val="{{ true }}">
+            <dc-import name="FileDropzone" id="sarsNoticeOfRegistration" label="SARS Notice of Registration" required="{{ true }}" value="{{ documents.sarsNoticeOfRegistration }}" onChange="{{ docSarsChange }}" error="{{ errors.sarsNoticeOfRegistration }}" hint-size="100%,150px"></dc-import>
+          </sc-if>
+          <sc-if value="{{ bbeeIsNonCompliant }}" hint-placeholder-val="{{ false }}">
+            <p style="font-family:'Poppins',sans-serif;font-size:12px;margin:-8px 0 0;color:#A8A29E">Do you have a B-BBEE non-compliance certificate? If so, please upload it below.</p>
+          </sc-if>
+          <dc-import name="FileDropzone" id="bbeeCertificate" label="{{ bbeeCertLabel }}" required="{{ bbeeCertRequired }}" value="{{ documents.bbeeCertificate }}" onChange="{{ docBbeeCertificateChange }}" error="{{ errors.bbeeCertificate }}" hint-size="100%,150px"></dc-import>
+          <dc-import name="FileDropzone" id="bankConfirmationLetter" label="Bank Confirmation Letter" required="{{ true }}" value="{{ documents.bankConfirmationLetter }}" onChange="{{ docBankConfirmationChange }}" error="{{ errors.bankConfirmationLetter }}" hint-size="100%,150px"></dc-import>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+          <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+          <button onClick="{{ handleNextDocuments }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isCredit }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Credit application terms">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+        <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="{{ p.barStyle }}"></div>
+            <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 32px;color:#FAFAF8">Credit application terms</h2>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <dc-import name="FormField" label="Credit limit requested (ZAR)" type="text" inputMode="numeric" required="{{ true }}" placeholder="e.g. 100000" prefix="R" value="{{ credit.creditLimitRequested }}" onChange="{{ creditLimitChange }}" error="{{ errors.creditLimitRequested }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Estimated monthly purchase volume (ZAR)" type="text" inputMode="numeric" placeholder="Optional" prefix="R" value="{{ credit.estimatedMonthlyPurchase }}" onChange="{{ creditMonthlyPurchaseChange }}" error="{{ errors.estimatedMonthlyPurchase }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="SelectField" label="Payment terms requested" placeholder="Select payment terms" options="{{ paymentTermsOptions }}" value="{{ credit.paymentTermsRequested }}" onChange="{{ creditPaymentTermsChange }}" error="{{ errors.paymentTermsRequested }}" hint-size="100%,86px"></dc-import>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleNextCredit }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isSuretyship }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Suretyship agreement">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:40px">
+        <sc-for list="{{ pillsView }}" as="p" hint-placeholder-count="9">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div style="{{ p.barStyle }}"></div>
+            <div style="{{ p.circleStyle }}">{{ p.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Suretyship agreement</h2>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">Each director or member below must read, agree to, and digitally sign this suretyship.</p>
+      <div style="display:flex;flex-direction:column;gap:32px">
+        <sc-for list="{{ suretyshipView }}" as="s" hint-placeholder-count="1">
+          <div style="border-radius:16px;padding:20px;box-sizing:border-box;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06)">
+            <div style="margin-bottom:16px">
+              <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;color:#A8A29E">{{ s.label }}</span>
+            </div>
+            <div style="border-radius:12px;padding:16px;margin-bottom:20px;box-sizing:border-box;font-family:'Poppins',sans-serif;font-size:12px;line-height:1.6;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);color:#A8A29E">
+              <p style="margin:0 0 8px">{{ s.suretyText }}</p>
+              <p style="margin:0">This is a real, binding personal guarantee. Read it carefully — if you're unsure of what you're agreeing to, get independent advice before signing.</p>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <dc-import name="CheckboxField" label="I have read and agree to be personally bound by this suretyship." checked="{{ s.agreed }}" onChange="{{ s.agreedChange }}" error="{{ s.agreedError }}" hint-size="100%,46px"></dc-import>
+              <dc-import name="FormField" label="Full name (signature)" required="{{ true }}" placeholder="Type your full name exactly as above to sign" value="{{ s.signature }}" onChange="{{ s.signatureChange }}" error="{{ s.signatureError }}" hint-size="100%,86px"></dc-import>
+              <dc-import name="FormField" label="Date" type="date" required="{{ true }}" value="{{ s.date }}" onChange="{{ s.dateChange }}" error="{{ s.dateError }}" hint-size="100%,86px"></dc-import>
+              <dc-import name="SignaturePad" label="Draw your signature (optional, in addition to typed name above)" value="{{ s.drawnSignature }}" onChange="{{ s.drawnSignatureChange }}" hint-size="100%,210px"></dc-import>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleNextSuretyship }}" style="font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66">Next step ›</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center" data-screen-label="Review and declaration">
+    <div style="width:100%;max-width:672px;display:flex;align-items:center;gap:12px;margin-bottom:32px;padding:0 4px;box-sizing:border-box">
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <div style="position:absolute;width:64px;height:64px;border-radius:9999px;filter:blur(20px);background:radial-gradient(circle, #C9863F66, transparent 70%);animation:logo-pulse 3s ease-in-out infinite"></div>
+        <div style="position:relative;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#1C1B19,#141413);border:1px solid #C9863F77;box-shadow:0 0 14px 1px #C9863F55, inset 0 0 8px #C9863F22">
+          <img src="logo.png" alt="Bennett's Engineering" style="width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column">
+        <span style="font-family:'Lora',serif;font-size:16px;line-height:1.2;color:#FAFAF8">Bennett's Engineering</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#A8A29E">Debtor Application</span>
+      </div>
+    </div>
+    <div style="position:relative;width:100%;max-width:672px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 4px;color:#FAFAF8">Review &amp; submit</h2>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 32px;color:#A8A29E">Please review your details before submitting.</p>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <sc-for list="{{ reviewGroups }}" as="g" hint-placeholder-count="9">
+          <div style="border-radius:16px;padding:20px;box-sizing:border-box;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <h3 style="margin:0;font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;color:#A8A29E">{{ g.title }}</h3>
+              <button onClick="{{ g.edit }}" style="display:flex;align-items:center;gap:4px;font-family:'Poppins',sans-serif;font-size:12px;background:none;border:none;cursor:pointer;color:#E3B679">
+                <svg viewBox="0 0 16 16" style="width:12px;height:12px" fill="none" aria-hidden="true"><path d="M11 2l3 3-8 8-3.5.5.5-3.5 8-8z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                Edit
+              </button>
+            </div>
+            <div>
+              <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
+                <div style="{{ r.rowStyle }}">
+                  <span style="font-family:'Poppins',sans-serif;font-size:14px;color:#A8A29E">{{ r.label }}</span>
+                  <span style="font-family:'Poppins',sans-serif;font-size:14px;color:#FAFAF8;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:16px">{{ r.value }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:20px">
+        <p style="margin:0;font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;text-transform:uppercase;color:#A8A29E">Declaration</p>
+        <dc-import name="FormField" label="Full name (signature)" required="{{ true }}" placeholder="Type your full name to sign" value="{{ declaration.signatureFullName }}" onChange="{{ declarationSignatureChange }}" error="{{ errors.signatureFullName }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="FormField" label="Date" type="date" required="{{ true }}" value="{{ declaration.signatureDate }}" onChange="{{ declarationDateChange }}" error="{{ errors.signatureDate }}" hint-size="100%,86px"></dc-import>
+        <dc-import name="CheckboxField" label="I confirm the information provided is accurate and up to date." checked="{{ consent.accurateInfo }}" onChange="{{ consentAccurateChange }}" error="{{ errors.accurateInfo }}" hint-size="100%,46px"></dc-import>
+        <dc-import name="CheckboxField" label="I consent to Bennett's Engineering processing this information in accordance with the POPI Act." checked="{{ consent.popiConsent }}" onChange="{{ consentPopiChange }}" error="{{ errors.popiConsent }}" hint-size="100%,46px"></dc-import>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
+        <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
+        <button onClick="{{ handleSubmit }}" disabled="{{ submitDisabled }}" style="{{ submitButtonStyle }}">Submit application</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isConfirmation }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;width:100%;display:flex;justify-content:center" data-screen-label="Confirmation">
+    <div style="position:relative;width:100%;max-width:448px;border-radius:24px;padding:36px;box-sizing:border-box;background:#1C1B19;border:1px solid rgba(255,255,255,0.06);box-shadow:0 20px 60px -15px rgba(0,0,0,0.6)">
+      <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding:16px 0">
+        <div style="width:64px;height:64px;border-radius:9999px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;background:linear-gradient(135deg,#C9863F,#E3B679);box-shadow:0 0 30px 4px #C9863F55">
+          <svg viewBox="0 0 26 26" style="width:28px;height:28px" fill="none" aria-hidden="true"><path d="M5 13l5.5 5.5L21 8" stroke="#141413" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+        <h2 style="font-family:'Lora',serif;font-size:24px;margin:0 0 8px;color:#FAFAF8">Application received</h2>
+        <p style="font-family:'Poppins',sans-serif;font-size:14px;margin:0 0 24px;max-width:280px;color:#A8A29E">Thank you. We'll review your credit application and be in touch within 3 business days.</p>
+        <div style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.05em;border-radius:9999px;padding:8px 16px;margin-bottom:32px;background:rgba(255,255,255,0.05);color:#E3B679">REF: {{ referenceNumberDisplay }}</div>
+        <button onClick="{{ resetForm }}" style="width:100%;font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;cursor:pointer;box-shadow:0 4px 20px -4px #C9863F66;box-sizing:border-box">Return to homepage</button>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ showRequiredNote }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;margin-top:28px;text-align:center">
+    <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.02em;color:#A8A29E"><span style="color:#E3B679;font-weight:600">*</span>&nbsp;Required field</span>
+  </div>
+  </sc-if>
+  <sc-if value="{{ isCredit }}" hint-placeholder-val="{{ false }}">
+  <div style="position:relative;z-index:10;margin-top:28px;max-width:672px;text-align:center;padding:0 16px;box-sizing:border-box">
+    <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.02em;color:#A8A29E">Credit limit and payment terms exclude projects, which are payable on specific project-based terms as quoted.</span>
+  </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const STEP_ORDER = ["welcome","company","contact","directors","references","tax","banking","documents","credit","suretyship","review","confirmation"];
+const DATA_STEPS = ["company","contact","directors","references","tax","banking","documents","credit","suretyship"];
+const ENTITY_TYPES = ["(Pty) Ltd","CC","Sole Proprietor","Partnership","Trust"];
+const FOREIGN_ENTITY_TYPES = ["Limited Company (Ltd/LLC)","Public Company","Sole Proprietor","Partnership","Trust","Other"];
+const ENTITY_TYPES_BY_COUNTRY = {
+  "United States": ["LLC","C-Corporation","S-Corporation","Sole Proprietorship","Partnership","Trust"],
+  "United Kingdom": ["Private Limited Company (Ltd)","Public Limited Company (PLC)","Limited Liability Partnership (LLP)","Sole Trader","Partnership","Trust"],
+  "Australia": ["Proprietary Limited (Pty Ltd)","Public Company","Sole Trader","Partnership","Trust"],
+  "New Zealand": ["Limited Company (Ltd)","Sole Trader","Partnership","Trust"],
+  "Canada": ["Corporation (Inc./Ltd.)","Sole Proprietorship","Partnership","Trust"],
+  "Germany": ["GmbH","AG","Sole Proprietorship","Partnership (OHG/KG)","Trust/Foundation"],
+  "India": ["Private Limited Company","Public Limited Company","Limited Liability Partnership (LLP)","Sole Proprietorship","Partnership","Trust"],
+  "Namibia": ["Pty Ltd","CC","Sole Proprietor","Partnership","Trust"],
+  "Botswana": ["Pty Ltd","Sole Proprietor","Partnership","Trust"],
+  "Ireland": ["Private Company Limited by Shares (LTD)","Public Limited Company (PLC)","Sole Trader","Partnership","Trust"],
+  "Singapore": ["Private Limited Company (Pte Ltd)","Sole Proprietorship","Partnership","Trust"],
+  "Hong Kong": ["Private Limited Company","Sole Proprietorship","Partnership","Trust"],
+  "United Arab Emirates": ["Limited Liability Company (LLC)","Free Zone Company","Sole Establishment","Partnership","Trust"],
+};
+const BBEE_LEVELS = ["Level 1","Level 2","Level 3","Level 4","Level 5","Level 6","Level 7","Level 8","Exempt","Non-compliant"];
+const ACCOUNT_TYPES = ["Current/Cheque","Savings"];
+const COUNTRIES = ["South Africa","Afghanistan","Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahrain","Bangladesh","Belarus","Belgium","Belize","Benin","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Chad","Chile","China","Colombia","Democratic Republic of the Congo","Republic of the Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominican Republic","Ecuador","Egypt","El Salvador","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Guatemala","Guinea","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory Coast","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Mauritania","Mauritius","Mexico","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saudi Arabia","Senegal","Serbia","Sierra Leone","Singapore","Slovakia","Slovenia","Somalia","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Togo","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
+
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const SA_PHONE_RE = /^(\+27|0)[1-9]\d{8}$/;
+const GENERIC_PHONE_RE = /^\+?[1-9]\d{7,14}$/;
+const SA_ID_RE = /^\d{13}$/;
+const VAT_RE = /^4\d{9}$/;
+const INCOME_TAX_RE = /^[01239]\d{9}$/;
+const CIPC_RE = /^\d{4}\/\d{6}\/\d{2}$/;
+const BRANCH_CODE_RE = /^\d{6}$/;
+const ACCOUNT_NUMBER_RE = /^\d{6,16}$/;
+const SWIFT_RE = /^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
+
+function blankDirector() {
+  const today = new Date();
+  const todayStr = today.getFullYear() + "-" + String(today.getMonth() + 1).padStart(2, "0") + "-" + String(today.getDate()).padStart(2, "0");
+  return { fullName:"", idNumber:"", residentialAddress:"", idDocument:null, suretyshipAgreed:false, suretyshipSignature:"", suretyshipDate:todayStr, suretyshipDrawnSignature:null };
+}
+
+function initialFormData() {
+  return {
+    company: { tradingName:"", registeredName:"", website:"", entityType:"", isForeignEntity:null, cipcNumber:"", countryOfRegistration:"", foreignRegistrationNumber:"" },
+    contact: { country:"South Africa", accountsContactName:"", accountsEmail:"", accountsPhone:"", accountsCell:"", accountsPhysicalAddress:"", accountsPostalAddress:"", accountsPostalSameAsPhysical:false, buyerContactDifferent:false, buyerContactName:"", buyerEmail:"", buyerPhone:"", buyerCell:"" },
+    directors: [blankDirector()],
+    references: { tradeRef1:{companyName:"",contactPerson:"",phone:"",email:""}, tradeRef2:{companyName:"",contactPerson:"",phone:"",email:""} },
+    tax: { vatRegistered:null, vatNumber:"", incomeTaxNumber:"", bbeeLevel:"" },
+    banking: { isForeignBank:false, bankName:"", accountHolder:"", accountNumber:"", branchCode:"", accountType:"", swiftCode:"", bankCountry:"", bankAddress:"" },
+    documents: { cipcCertificate:null, vatCertificate:null, sarsNoticeOfRegistration:null, vatNoticeOfRegistration:null, bbeeCertificate:null, bankConfirmationLetter:null },
+    credit: { creditLimitRequested:"", estimatedMonthlyPurchase:"", paymentTermsRequested:"" },
+    declaration: { signatureFullName:"", signatureDate:"" },
+    consent: { accurateInfo:false, popiConsent:false },
+  };
+}
+
+class Component extends DCLogic {
+  state = {
+    currentStep: "welcome",
+    formData: initialFormData(),
+    errors: {},
+    referenceNumber: null,
+  };
+
+  updateSection(section, patch) {
+    this.setState((s) => ({ formData: { ...s.formData, [section]: { ...s.formData[section], ...patch } } }));
+  }
+  updateDirector(index, patch) {
+    this.setState((s) => ({ formData: { ...s.formData, directors: s.formData.directors.map((d, i) => (i === index ? { ...d, ...patch } : d)) } }));
+  }
+  addDirector = () => {
+    this.setState((s) => ({ formData: { ...s.formData, directors: [...s.formData.directors, blankDirector()] } }));
+  };
+  removeDirector(index) {
+    this.setState((s) => ({ formData: { ...s.formData, directors: s.formData.directors.filter((_, i) => i !== index) } }));
+  }
+  goToStep = (step) => {
+    this.setState({ errors: {}, currentStep: step });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+  goNext = () => {
+    const idx = STEP_ORDER.indexOf(this.state.currentStep);
+    this.goToStep(STEP_ORDER[Math.min(idx + 1, STEP_ORDER.length - 1)]);
+  };
+  goBack = () => {
+    const idx = STEP_ORDER.indexOf(this.state.currentStep);
+    this.goToStep(STEP_ORDER[Math.max(idx - 1, 0)]);
+  };
+  resetForm = () => {
+    this.setState({ formData: initialFormData(), errors: {}, referenceNumber: null, currentStep: "welcome" });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  requireField(errors, key, value, message) {
+    if (!value || String(value).trim() === "") errors[key] = message || "This field is required";
+  }
+  isPhoneValid(phone, isLocal) {
+    const stripped = phone.replace(/[\s-]/g, "");
+    return isLocal ? SA_PHONE_RE.test(stripped) : SA_PHONE_RE.test(stripped) || GENERIC_PHONE_RE.test(stripped);
+  }
+
+  // Normalizes a phone/cell number to a single consistent E.164-style format
+  // (e.g. +27821234567) so values stored in the database are uniform.
+  formatPhoneNumber(raw, isLocal) {
+    if (!raw) return "";
+    let digits = raw.trim().replace(/[^\d+]/g, "");
+    const hadPlus = digits.startsWith("+");
+    digits = digits.replace(/\+/g, "");
+    if (!digits) return "";
+    if (isLocal) {
+      if (digits.startsWith("0")) digits = "27" + digits.slice(1);
+      else if (!digits.startsWith("27")) digits = "27" + digits;
+      return "+" + digits;
+    }
+    return (hadPlus ? "+" : "") + digits;
+  }
+
+  normalizeContactPhoneField(key) {
+    return () => {
+      const contact = this.state.formData.contact;
+      const isLocal = contact.country === "South Africa" || contact.country === "";
+      const formatted = this.formatPhoneNumber(contact[key], isLocal);
+      if (formatted !== contact[key]) this.updateSection("contact", { [key]: formatted });
+    };
+  }
+  isValidSaIdChecksum(id) {
+    let sum = 0, alternate = false;
+    for (let i = id.length - 1; i >= 0; i--) {
+      let digit = parseInt(id[i], 10);
+      if (alternate) { digit *= 2; if (digit > 9) digit -= 9; }
+      sum += digit;
+      alternate = !alternate;
+    }
+    return sum % 10 === 0;
+  }
+
+  validateCompany() {
+    const errors = {};
+    const { company } = this.state.formData;
+    this.requireField(errors, "tradingName", company.tradingName);
+    this.requireField(errors, "entityType", company.entityType, "Select an entity type");
+    if (company.isForeignEntity === null) {
+      errors.isForeignEntity = "Select whether this is a local or foreign entity";
+    } else if (company.isForeignEntity) {
+      this.requireField(errors, "countryOfRegistration", company.countryOfRegistration);
+      this.requireField(errors, "foreignRegistrationNumber", company.foreignRegistrationNumber);
+    } else {
+      this.requireField(errors, "cipcNumber", company.cipcNumber);
+      if (company.cipcNumber) {
+        const regErr = this.validateRegNumberFormat(company.entityType, company.cipcNumber);
+        if (regErr) errors.cipcNumber = regErr;
+      }
+    }
+    return errors;
+  }
+
+  validateRegNumberFormat(entityType, value) {
+    if (entityType === "CC") {
+      if (!/^CK\d{2,4}\/\d{4,6}$/i.test(value)) return "Enter a valid CK registration number, e.g. CK2007/123456";
+    } else if (entityType === "Sole Proprietor" || entityType === "Partnership") {
+      if (!INCOME_TAX_RE.test(value)) return "Income tax number must be 10 digits, starting with 0, 1, 2, 3 or 9";
+    } else if (entityType === "Trust") {
+      if (!/^IT\s?\d{1,6}\/\d{2,4}$/i.test(value)) return "Enter a valid Trust (IT) number, e.g. IT1234/17";
+    } else if (!CIPC_RE.test(value)) {
+      return "Enter a valid CIPC number, e.g. 2020/123456/07";
+    }
+    return null;
+  }
+
+  validateContact() {
+    const errors = {};
+    const { contact } = this.state.formData;
+    const isLocalContact = contact.country === "South Africa" || contact.country === "";
+    this.requireField(errors, "accountsContactName", contact.accountsContactName);
+    this.requireField(errors, "accountsEmail", contact.accountsEmail);
+    if (contact.accountsEmail && !EMAIL_RE.test(contact.accountsEmail)) errors.accountsEmail = "Enter a valid email address";
+    this.requireField(errors, "accountsPhone", contact.accountsPhone);
+    if (contact.accountsPhone && !this.isPhoneValid(contact.accountsPhone, isLocalContact)) errors.accountsPhone = isLocalContact ? "Enter a valid South African phone number" : "Enter a valid phone number";
+    if (contact.accountsCell && !this.isPhoneValid(contact.accountsCell, isLocalContact)) errors.accountsCell = isLocalContact ? "Enter a valid South African cell number" : "Enter a valid cell number";
+    this.requireField(errors, "accountsPhysicalAddress", contact.accountsPhysicalAddress);
+    this.requireField(errors, "country", contact.country, "Select a country");
+    if (contact.buyerContactDifferent) {
+      this.requireField(errors, "buyerContactName", contact.buyerContactName);
+      this.requireField(errors, "buyerEmail", contact.buyerEmail);
+      if (contact.buyerEmail && !EMAIL_RE.test(contact.buyerEmail)) errors.buyerEmail = "Enter a valid email address";
+      this.requireField(errors, "buyerPhone", contact.buyerPhone);
+      if (contact.buyerPhone && !this.isPhoneValid(contact.buyerPhone, isLocalContact)) errors.buyerPhone = isLocalContact ? "Enter a valid South African phone number" : "Enter a valid phone number";
+      if (contact.buyerCell && !this.isPhoneValid(contact.buyerCell, isLocalContact)) errors.buyerCell = isLocalContact ? "Enter a valid South African cell number" : "Enter a valid cell number";
+    }
+    return errors;
+  }
+
+  validateDirectors() {
+    const errors = {};
+    const directors = this.state.formData.directors;
+    directors.forEach((director, index) => {
+      this.requireField(errors, `directors.${index}.fullName`, director.fullName);
+      this.requireField(errors, `directors.${index}.idNumber`, director.idNumber);
+      if (director.idNumber) {
+        if (!SA_ID_RE.test(director.idNumber)) errors[`directors.${index}.idNumber`] = "Enter a valid 13-digit SA ID number";
+        else if (!this.isValidSaIdChecksum(director.idNumber)) errors[`directors.${index}.idNumber`] = "This doesn't look like a valid SA ID number";
+      }
+      this.requireField(errors, `directors.${index}.residentialAddress`, director.residentialAddress);
+      if (!director.idDocument) errors[`directors.${index}.idDocument`] = "Upload a copy of this director's ID";
+    });
+    return errors;
+  }
+
+  validateReferences() {
+    const errors = {};
+    const { references } = this.state.formData;
+    ["tradeRef1", "tradeRef2"].forEach((key) => {
+      const ref = references[key];
+      this.requireField(errors, `${key}.companyName`, ref.companyName);
+      this.requireField(errors, `${key}.contactPerson`, ref.contactPerson);
+      this.requireField(errors, `${key}.phone`, ref.phone);
+      if (ref.phone && !this.isPhoneValid(ref.phone, false)) errors[`${key}.phone`] = "Enter a valid phone number";
+      this.requireField(errors, `${key}.email`, ref.email);
+      if (ref.email && !EMAIL_RE.test(ref.email)) errors[`${key}.email`] = "Enter a valid email address";
+    });
+    return errors;
+  }
+
+  validateTax() {
+    const errors = {};
+    const { tax } = this.state.formData;
+    if (tax.vatRegistered === null) errors.vatRegistered = "Select whether the business is VAT registered";
+    if (tax.vatRegistered) {
+      this.requireField(errors, "vatNumber", tax.vatNumber);
+      if (tax.vatNumber && !VAT_RE.test(tax.vatNumber)) errors.vatNumber = "VAT number must be exactly 10 digits and start with 4";
+    }
+    this.requireField(errors, "incomeTaxNumber", tax.incomeTaxNumber);
+    if (tax.incomeTaxNumber && !INCOME_TAX_RE.test(tax.incomeTaxNumber)) errors.incomeTaxNumber = "Income tax number must be 10 digits, starting with 0, 1, 2, 3 or 9";
+    this.requireField(errors, "bbeeLevel", tax.bbeeLevel, "Select a B-BBEE level");
+    return errors;
+  }
+
+  validateBanking() {
+    const errors = {};
+    const { banking } = this.state.formData;
+    this.requireField(errors, "accountHolder", banking.accountHolder);
+    this.requireField(errors, "bankName", banking.bankName);
+    this.requireField(errors, "accountNumber", banking.accountNumber);
+    if (banking.isForeignBank) {
+      this.requireField(errors, "bankCountry", banking.bankCountry);
+      this.requireField(errors, "swiftCode", banking.swiftCode);
+      if (banking.swiftCode && !SWIFT_RE.test(banking.swiftCode.replace(/\s/g, "").toUpperCase())) errors.swiftCode = "Enter a valid 8 or 11 character SWIFT/BIC code";
+    } else {
+      if (banking.accountNumber && !ACCOUNT_NUMBER_RE.test(banking.accountNumber)) errors.accountNumber = "Account number must be 6-16 digits";
+      this.requireField(errors, "branchCode", banking.branchCode);
+      if (banking.branchCode && !BRANCH_CODE_RE.test(banking.branchCode)) errors.branchCode = "Branch code must be exactly 6 digits";
+      this.requireField(errors, "accountType", banking.accountType, "Select an account type");
+    }
+    return errors;
+  }
+
+  validateFileField(errors, key, file, required) {
+    if (!file) { if (required) errors[key] = "This document is required"; return; }
+  }
+
+  validateDocuments() {
+    const errors = {};
+    const { documents, tax, company } = this.state.formData;
+    const cipcRequired = !company.isForeignEntity && (company.entityType === "(Pty) Ltd" || company.entityType === "CC");
+    const bbeeRequired = !!tax.bbeeLevel && tax.bbeeLevel !== "Exempt" && tax.bbeeLevel !== "Non-compliant";
+    this.validateFileField(errors, "cipcCertificate", documents.cipcCertificate, cipcRequired);
+    this.validateFileField(errors, "vatCertificate", documents.vatCertificate, !!tax.vatRegistered);
+    this.validateFileField(errors, "sarsNoticeOfRegistration", documents.sarsNoticeOfRegistration, !tax.vatRegistered);
+    this.validateFileField(errors, "vatNoticeOfRegistration", documents.vatNoticeOfRegistration, !!tax.vatRegistered);
+    this.validateFileField(errors, "bbeeCertificate", documents.bbeeCertificate, bbeeRequired);
+    this.validateFileField(errors, "bankConfirmationLetter", documents.bankConfirmationLetter, true);
+    return errors;
+  }
+
+  validateCredit() {
+    const errors = {};
+    const { credit } = this.state.formData;
+    this.requireField(errors, "creditLimitRequested", credit.creditLimitRequested);
+    if (credit.creditLimitRequested) {
+      const limit = Number(credit.creditLimitRequested);
+      if (!Number.isFinite(limit) || limit <= 0) errors.creditLimitRequested = "Enter a valid credit limit greater than 0";
+    }
+    if (credit.estimatedMonthlyPurchase) {
+      const volume = Number(credit.estimatedMonthlyPurchase);
+      if (!Number.isFinite(volume) || volume < 0) errors.estimatedMonthlyPurchase = "Enter a valid amount";
+    }
+    if (credit.paymentTermsRequested === "60 Days from statement") errors.paymentTermsRequested = "We unfortunately do not offer 60 days terms.";
+    return errors;
+  }
+
+  isSameName(a, b) {
+    const normalize = (s) => s.trim().toLowerCase().replace(/\s+/g, " ");
+    return normalize(a) === normalize(b) && normalize(a).length > 0;
+  }
+
+  validateSuretyship() {
+    const errors = {};
+    const directors = this.state.formData.directors;
+    directors.forEach((director, index) => {
+      if (!director.suretyshipAgreed) errors[`suretyship.${index}.agreed`] = "This director/member must agree to the suretyship terms";
+      this.requireField(errors, `suretyship.${index}.signature`, director.suretyshipSignature, "Type your full name to sign");
+      if (director.suretyshipSignature && !this.isSameName(director.suretyshipSignature, director.fullName)) errors[`suretyship.${index}.signature`] = "Signature must match this director's full name exactly";
+      this.requireField(errors, `suretyship.${index}.date`, director.suretyshipDate, "Select the date");
+      if (director.suretyshipDate) {
+        const today = new Date(); today.setHours(23, 59, 59, 999);
+        if (new Date(director.suretyshipDate) > today) errors[`suretyship.${index}.date`] = "Signature date cannot be in the future";
+      }
+    });
+    return errors;
+  }
+
+  validateDeclarationAndConsent() {
+    const errors = {};
+    const { declaration, consent } = this.state.formData;
+    this.requireField(errors, "signatureFullName", declaration.signatureFullName, "Type your full name to sign");
+    this.requireField(errors, "signatureDate", declaration.signatureDate, "Select the date");
+    if (declaration.signatureDate) {
+      const today = new Date(); today.setHours(23, 59, 59, 999);
+      if (new Date(declaration.signatureDate) > today) errors.signatureDate = "Signature date cannot be in the future";
+    }
+    if (!consent.accurateInfo) errors.accurateInfo = "You must confirm the information is accurate";
+    if (!consent.popiConsent) errors.popiConsent = "You must consent to POPI Act processing";
+    return errors;
+  }
+
+  handleNextCompany = () => { const e = this.validateCompany(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleNextContact = () => { const e = this.validateContact(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleNextDirectors = () => { const e = this.validateDirectors(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleNextReferences = () => { const e = this.validateReferences(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleNextTax = () => { const e = this.validateTax(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleNextBanking = () => { const e = this.validateBanking(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleNextDocuments = () => { const e = this.validateDocuments(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleNextCredit = () => { const e = this.validateCredit(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleNextSuretyship = () => { const e = this.validateSuretyship(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
+  handleSubmit = () => {
+    const e = this.validateDeclarationAndConsent();
+    this.setState({ errors: e });
+    if (Object.keys(e).length === 0) {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      const digits = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
+      const ref = `BE-${y}${m}${day}-${digits}`;
+      this.setState({ referenceNumber: ref });
+      this.goToStep("confirmation");
+    }
+  };
+
+  bindSection(section, key) { return (v) => this.updateSection(section, { [key]: v }); }
+  bindNumericSection(section, key) { return (v) => this.updateSection(section, { [key]: v.replace(/[^\d]/g, "") }); }
+  bindDirector(index, key) { return (v) => this.updateDirector(index, { [key]: v }); }
+  bindReference(refKey, key) {
+    return (v) => this.updateSection("references", { [refKey]: { ...this.state.formData.references[refKey], [key]: v } });
+  }
+
+  renderVals() {
+    const { currentStep, formData, errors, referenceNumber } = this.state;
+    const { company, contact, directors, references, tax, banking, documents, credit, declaration, consent } = formData;
+    const stepIndex = DATA_STEPS.indexOf(currentStep);
+
+    const pillsView = DATA_STEPS.map((s, i) => {
+      const done = i < stepIndex;
+      const active = i === stepIndex;
+      return {
+        barStyle: `flex:1;height:6px;border-radius:9999px;transition:all .3s;background:${done || active ? "linear-gradient(90deg,#C9863F,#E3B679)" : "rgba(255,255,255,0.08)"};box-shadow:${active ? "0 0 12px 1px #C9863F66" : "none"}`,
+        circleStyle: `width:24px;height:24px;border-radius:9999px;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Poppins',sans-serif;transition:all .3s;background:${done ? "#C9863F" : active ? "transparent" : "rgba(255,255,255,0.06)"};border:${active ? "1.5px solid #C9863F" : "1.5px solid transparent"};color:${done ? "#141413" : active ? "#E3B679" : "#A8A29E"};box-shadow:${active ? "0 0 10px 1px #C9863F55" : "none"}`,
+        label: done ? "✓" : String(i + 1),
+      };
+    });
+
+    const directorsView = directors.map((d, i) => ({
+      index: i,
+      label: `Director ${i + 1}`,
+      showRemove: directors.length > 1,
+      remove: () => this.removeDirector(i),
+      fullName: d.fullName,
+      fullNameChange: this.bindDirector(i, "fullName"),
+      fullNameError: errors[`directors.${i}.fullName`] || "",
+      idNumber: d.idNumber,
+      idNumberChange: (v) => this.updateDirector(i, { idNumber: v.replace(/\D/g, "").slice(0, 13) }),
+      idNumberError: errors[`directors.${i}.idNumber`] || "",
+      residentialAddress: d.residentialAddress,
+      residentialAddressChange: this.bindDirector(i, "residentialAddress"),
+      residentialAddressError: errors[`directors.${i}.residentialAddress`] || "",
+      idDocument: d.idDocument,
+      idDocumentChange: this.bindDirector(i, "idDocument"),
+      idDocumentError: errors[`directors.${i}.idDocument`] || "",
+      idFieldId: `director-${i}-id`,
+      addressFieldId: `director-${i}-address`,
+    }));
+
+    const businessName = company.tradingName || "the business";
+    const suretyshipView = directors.map((d, i) => ({
+      index: i,
+      label: `Surety ${i + 1}${d.fullName ? " — " + d.fullName : ""}`,
+      suretyText: `In consideration of Bennett's Engineering agreeing to grant credit facilities to ${businessName}, I, ${d.fullName || "the undersigned director/member"}${d.idNumber ? ` (ID no. ${d.idNumber})` : ""}, hereby bind myself as surety for and co-principal debtor with ${businessName} for the due and punctual payment of all amounts owed to Bennett's Engineering, whether now or in the future, together with interest and any collection costs, and renounce the legal benefits of excussion, division and cession of action.`,
+      agreed: d.suretyshipAgreed,
+      agreedChange: this.bindDirector(i, "suretyshipAgreed"),
+      agreedError: errors[`suretyship.${i}.agreed`] || "",
+      signature: d.suretyshipSignature,
+      signatureChange: this.bindDirector(i, "suretyshipSignature"),
+      signatureError: errors[`suretyship.${i}.signature`] || "",
+      date: d.suretyshipDate,
+      dateChange: this.bindDirector(i, "suretyshipDate"),
+      dateError: errors[`suretyship.${i}.date`] || "",
+      drawnSignature: d.suretyshipDrawnSignature,
+      drawnSignatureChange: this.bindDirector(i, "suretyshipDrawnSignature"),
+    }));
+
+    const mkRows = (rows) => rows.map((r, i) => ({ label: r[0], value: r[1] || "—", rowStyle: `display:flex;justify-content:space-between;gap:16px;padding:8px 0;${i > 0 ? "border-top:1px solid rgba(255,255,255,0.06)" : ""}` }));
+
+    const companyRows = [
+      ["Trading name", company.tradingName],
+      ["Registered name", company.registeredName],
+      ["Website", company.website],
+      ["Entity type", company.entityType],
+      ["Local or foreign", company.isForeignEntity === null ? "" : company.isForeignEntity ? "Foreign" : "Local"],
+    ];
+    if (company.isForeignEntity) {
+      companyRows.push(["Country of registration", company.countryOfRegistration]);
+      companyRows.push(["Foreign registration number", company.foreignRegistrationNumber]);
+    } else {
+      const regLabel = company.entityType === "CC" ? "CK number" : company.entityType === "Sole Proprietor" || company.entityType === "Partnership" ? "Income tax number" : company.entityType === "Trust" ? "Trust (IT) number" : "CIPC number";
+      companyRows.push([regLabel, company.cipcNumber]);
+    }
+
+    const bankingRows = [
+      ["Local or foreign", banking.isForeignBank ? "Foreign" : "Local"],
+      ["Account holder", banking.accountHolder],
+      ["Bank name", banking.bankName],
+      ["Account number", banking.accountNumber],
+    ];
+    if (banking.isForeignBank) {
+      bankingRows.push(["Bank country", banking.bankCountry]);
+      bankingRows.push(["SWIFT/BIC code", banking.swiftCode]);
+    } else {
+      bankingRows.push(["Branch code", banking.branchCode]);
+      bankingRows.push(["Account type", banking.accountType]);
+    }
+
+    const reviewGroups = [
+      { title: "Company details", edit: () => this.goToStep("company"), rows: mkRows(companyRows) },
+      { title: "Contact details", edit: () => this.goToStep("contact"), rows: mkRows([
+        ["Accounts Payable contact", contact.accountsContactName],
+        ["Accounts Payable email", contact.accountsEmail],
+        ["Accounts Payable phone", contact.accountsPhone],
+        ["Accounts Payable cell", contact.accountsCell],
+        ["Accounts Payable address", contact.accountsPhysicalAddress],
+        ["Country", contact.country],
+        ["Accounts Payable postal address", contact.accountsPostalSameAsPhysical ? contact.accountsPhysicalAddress : contact.accountsPostalAddress],
+        ...(contact.buyerContactDifferent ? [
+          ["Buyer/Procurement contact", `${contact.buyerContactName} (${contact.buyerEmail})`],
+          ["Buyer/Procurement phone", contact.buyerPhone],
+          ["Buyer/Procurement cell", contact.buyerCell],
+        ] : []),
+      ]) },
+      { title: "Directors & members", edit: () => this.goToStep("directors"), rows: mkRows(directors.map((d, i) => [`Director ${i + 1}`, `${d.fullName} (${d.idNumber})`])) },
+      { title: "Trade references", edit: () => this.goToStep("references"), rows: mkRows([
+        ["Trade ref 1", references.tradeRef1.companyName],
+        ["Trade ref 2", references.tradeRef2.companyName],
+      ]) },
+      { title: "Tax & compliance", edit: () => this.goToStep("tax"), rows: mkRows([
+        ["VAT registered", tax.vatRegistered === null ? "" : tax.vatRegistered ? "Yes" : "No"],
+        ["VAT number", tax.vatNumber],
+        ["Income tax number", tax.incomeTaxNumber],
+        ["B-BBEE level", tax.bbeeLevel],
+      ]) },
+      { title: "Banking details", edit: () => this.goToStep("banking"), rows: mkRows(bankingRows) },
+      { title: "Document uploads", edit: () => this.goToStep("documents"), rows: mkRows([
+        ["CIPC certificate", documents.cipcCertificate ? documents.cipcCertificate.name : ""],
+        ["VAT certificate", documents.vatCertificate ? documents.vatCertificate.name : ""],
+        [tax.vatRegistered ? "VAT notice of registration" : "SARS notice of registration", tax.vatRegistered ? (documents.vatNoticeOfRegistration ? documents.vatNoticeOfRegistration.name : "") : (documents.sarsNoticeOfRegistration ? documents.sarsNoticeOfRegistration.name : "")],
+        ["B-BBEE certificate", documents.bbeeCertificate ? documents.bbeeCertificate.name : ""],
+        ["Bank confirmation letter", documents.bankConfirmationLetter ? documents.bankConfirmationLetter.name : ""],
+      ]) },
+      { title: "Credit application terms", edit: () => this.goToStep("credit"), rows: mkRows([
+        ["Credit limit requested", credit.creditLimitRequested ? `R ${Number(credit.creditLimitRequested).toLocaleString("en-ZA")}` : ""],
+        ["Estimated monthly purchases", credit.estimatedMonthlyPurchase ? `R ${Number(credit.estimatedMonthlyPurchase).toLocaleString("en-ZA")}` : ""],
+        ["Payment terms requested", credit.paymentTermsRequested],
+      ]) },
+      { title: "Suretyship agreement", edit: () => this.goToStep("suretyship"), rows: mkRows(directors.flatMap((d, i) => [
+        [`Surety ${i + 1}${d.fullName ? " — " + d.fullName : ""}`, d.suretyshipAgreed ? "Agreed" : "Not agreed"],
+        ["Signature", d.suretyshipSignature],
+        ["Date signed", d.suretyshipDate],
+      ])) },
+    ];
+
+    const submitDisabled = !consent.accurateInfo || !consent.popiConsent;
+    const submitButtonStyle = `font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;box-shadow:0 4px 20px -4px #C9863F66;${submitDisabled ? "opacity:0.4;cursor:not-allowed" : "cursor:pointer"}`;
+
+    return {
+      isWelcome: currentStep === "welcome",
+      isCompany: currentStep === "company",
+      isContact: currentStep === "contact",
+      isDirectors: currentStep === "directors",
+      isReferences: currentStep === "references",
+      isTax: currentStep === "tax",
+      isBanking: currentStep === "banking",
+      isDocuments: currentStep === "documents",
+      isCredit: currentStep === "credit",
+      isSuretyship: currentStep === "suretyship",
+      isReview: currentStep === "review",
+      isConfirmation: currentStep === "confirmation",
+      showRequiredNote: currentStep !== "welcome" && currentStep !== "confirmation" && currentStep !== "credit",
+
+      goNext: this.goNext,
+      goBack: this.goBack,
+      addDirector: this.addDirector,
+      resetForm: this.resetForm,
+
+      pillsView,
+      directorsView,
+      suretyshipView,
+      reviewGroups,
+      errors,
+
+      company,
+      contact,
+      references,
+      tax,
+      banking,
+      documents,
+      credit,
+      declaration,
+      consent,
+
+      entityOptions: company.isForeignEntity ? (ENTITY_TYPES_BY_COUNTRY[company.countryOfRegistration] || FOREIGN_ENTITY_TYPES) : ENTITY_TYPES,
+      regNumberLabel: (() => {
+        if (company.entityType === "CC") return "CK registration number";
+        if (company.entityType === "Sole Proprietor" || company.entityType === "Partnership") return "Income tax registration number";
+        if (company.entityType === "Trust") return "Trust (IT) registration number";
+        return "CIPC registration number";
+      })(),
+      regNumberPlaceholder: (() => {
+        if (company.entityType === "CC") return "e.g. CK2007/123456";
+        if (company.entityType === "Sole Proprietor" || company.entityType === "Partnership") return "e.g. 0123456789";
+        if (company.entityType === "Trust") return "e.g. IT1234/17";
+        return "e.g. 2024/123456/07";
+      })(),
+      regNumberHelper: (() => {
+        if (company.entityType === "CC") return "Format: CK followed by registration year and number, as shown on your founding statement";
+        if (company.entityType === "Sole Proprietor" || company.entityType === "Partnership") return "10 digits, starts with 0, 1, 2, 3 or 9 — as shown on your SARS income tax registration";
+        if (company.entityType === "Trust") return "Master's Office reference number, e.g. IT1234/17";
+        return "Format: YYYY/NNNNNN/NN as shown on your CIPC certificate";
+      })(),
+      countriesNoSA: COUNTRIES.filter((c) => c !== "South Africa"),
+      countries: COUNTRIES,
+      bbeeLevels: BBEE_LEVELS,
+      accountTypes: ACCOUNT_TYPES,
+      companyForeignTrue: company.isForeignEntity === true,
+      companyForeignFalse: company.isForeignEntity === false,
+      contactCountryCode: contact.country === "South Africa" ? "za" : "",
+
+      companyTradingNameChange: this.bindSection("company", "tradingName"),
+      companyRegisteredNameChange: this.bindSection("company", "registeredName"),
+      companyWebsiteChange: this.bindSection("company", "website"),
+      companyIsForeignChange: (v) => this.updateSection("company", { isForeignEntity: v, entityType: "" }),
+      companyEntityTypeChange: this.bindSection("company", "entityType"),
+      companyCountryOfRegChange: (v) => this.updateSection("company", { countryOfRegistration: v, entityType: "" }),
+      companyForeignRegNumberChange: this.bindSection("company", "foreignRegistrationNumber"),
+      companyCipcNumberChange: this.bindSection("company", "cipcNumber"),
+
+      contactCountryChange: this.bindSection("contact", "country"),
+      contactAccountsNameChange: this.bindSection("contact", "accountsContactName"),
+      contactAccountsEmailChange: this.bindSection("contact", "accountsEmail"),
+      contactAccountsPhoneChange: this.bindSection("contact", "accountsPhone"),
+      contactAccountsCellChange: this.bindSection("contact", "accountsCell"),
+      contactAccountsPhoneBlur: this.normalizeContactPhoneField("accountsPhone"),
+      contactAccountsCellBlur: this.normalizeContactPhoneField("accountsCell"),
+      contactAccountsPhysicalAddressChange: this.bindSection("contact", "accountsPhysicalAddress"),
+      contactAccountsPostalSameChange: this.bindSection("contact", "accountsPostalSameAsPhysical"),
+      contactAccountsPostalAddressChange: this.bindSection("contact", "accountsPostalAddress"),
+      contactAccountsPostalDifferent: !contact.accountsPostalSameAsPhysical,
+      contactBuyerDifferentChange: this.bindSection("contact", "buyerContactDifferent"),
+      contactBuyerNameChange: this.bindSection("contact", "buyerContactName"),
+      contactBuyerEmailChange: this.bindSection("contact", "buyerEmail"),
+      contactBuyerPhoneChange: this.bindSection("contact", "buyerPhone"),
+      contactBuyerCellChange: this.bindSection("contact", "buyerCell"),
+      contactBuyerPhoneBlur: this.normalizeContactPhoneField("buyerPhone"),
+      contactBuyerCellBlur: this.normalizeContactPhoneField("buyerCell"),
+
+      ref1CompanyNameChange: this.bindReference("tradeRef1", "companyName"),
+      ref1ContactPersonChange: this.bindReference("tradeRef1", "contactPerson"),
+      ref1PhoneChange: this.bindReference("tradeRef1", "phone"),
+      ref1EmailChange: this.bindReference("tradeRef1", "email"),
+      ref2CompanyNameChange: this.bindReference("tradeRef2", "companyName"),
+      ref2ContactPersonChange: this.bindReference("tradeRef2", "contactPerson"),
+      ref2PhoneChange: this.bindReference("tradeRef2", "phone"),
+      ref2EmailChange: this.bindReference("tradeRef2", "email"),
+
+      taxVatRegisteredChange: this.bindSection("tax", "vatRegistered"),
+      taxVatNumberChange: this.bindSection("tax", "vatNumber"),
+      taxIncomeTaxNumberChange: this.bindSection("tax", "incomeTaxNumber"),
+      taxBbeeLevelChange: this.bindSection("tax", "bbeeLevel"),
+
+      bankingIsForeignChange: this.bindSection("banking", "isForeignBank"),
+      bankingAccountHolderChange: this.bindSection("banking", "accountHolder"),
+      bankingBankNameChange: this.bindSection("banking", "bankName"),
+      bankingSelectBank: (code) => this.updateSection("banking", { branchCode: code }),
+      bankingSelectForeignSwift: (swift) => this.updateSection("banking", { swiftCode: swift }),
+      bankingBankCountryChange: this.bindSection("banking", "bankCountry"),
+      bankingAccountNumberChange: this.bindSection("banking", "accountNumber"),
+      bankingSwiftCodeChange: this.bindSection("banking", "swiftCode"),
+      bankingBankAddressChange: this.bindSection("banking", "bankAddress"),
+      bankingBranchCodeChange: this.bindSection("banking", "branchCode"),
+      bankingAccountTypeChange: this.bindSection("banking", "accountType"),
+
+      docCipcChange: this.bindSection("documents", "cipcCertificate"),
+      docVatChange: this.bindSection("documents", "vatCertificate"),
+      docSarsChange: this.bindSection("documents", "sarsNoticeOfRegistration"),
+      docVatNoticeChange: this.bindSection("documents", "vatNoticeOfRegistration"),
+      docBbeeCertificateChange: this.bindSection("documents", "bbeeCertificate"),
+      docBankConfirmationChange: this.bindSection("documents", "bankConfirmationLetter"),
+
+      creditLimitChange: this.bindNumericSection("credit", "creditLimitRequested"),
+      creditMonthlyPurchaseChange: this.bindNumericSection("credit", "estimatedMonthlyPurchase"),
+      creditPaymentTermsChange: this.bindSection("credit", "paymentTermsRequested"),
+
+      declarationSignatureChange: this.bindSection("declaration", "signatureFullName"),
+      declarationDateChange: this.bindSection("declaration", "signatureDate"),
+      consentAccurateChange: this.bindSection("consent", "accurateInfo"),
+      consentPopiChange: this.bindSection("consent", "popiConsent"),
+
+      handleNextCompany: this.handleNextCompany,
+      handleNextContact: this.handleNextContact,
+      handleNextDirectors: this.handleNextDirectors,
+      handleNextReferences: this.handleNextReferences,
+      handleNextTax: this.handleNextTax,
+      handleNextBanking: this.handleNextBanking,
+      handleNextDocuments: this.handleNextDocuments,
+      handleNextCredit: this.handleNextCredit,
+      handleNextSuretyship: this.handleNextSuretyship,
+      handleSubmit: this.handleSubmit,
+
+      bankingIsLocal: !banking.isForeignBank,
+      cipcRequired: !company.isForeignEntity && (company.entityType === "(Pty) Ltd" || company.entityType === "CC"),
+      bbeeIsNonCompliant: tax.bbeeLevel === "Non-compliant",
+      bbeeCertRequired: !!tax.bbeeLevel && tax.bbeeLevel !== "Exempt" && tax.bbeeLevel !== "Non-compliant",
+      bbeeCertLabel: tax.bbeeLevel === "Non-compliant" ? "B-BBEE non-compliance certificate" : "B-BBEE Certificate or Affidavit",
+      paymentTermsOptions: ["Cash on Delivery", "7 Days from Delivery", "30 Days from statement", "60 Days from statement"],
+      submitDisabled,
+      submitButtonStyle,
+      referenceNumberDisplay: referenceNumber ?? "—",
+    };
+  }
+}
+</script>
+</body>
+</html>

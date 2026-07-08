@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<label style="display:block" for="{{ fieldId }}">
+  <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.03em;color:#A8A29E">{{ label }}<sc-if value="{{ required }}" hint-placeholder-val="{{ false }}"><span style="color:#E3B679"> *</span></sc-if></span>
+  <span style="position:relative;margin-top:8px;display:block">
+    <select id="{{ fieldId }}" value="{{ value }}" onChange="{{ handleChange }}" style="{{ selectStyle }}">
+      <option value="" disabled style="color:#A8A29E">{{ placeholder }}</option>
+      <sc-for list="{{ options }}" as="opt" hint-placeholder-count="3">
+        <option value="{{ opt }}" style="background:#1C1B19;color:#FAFAF8">{{ opt }}</option>
+      </sc-for>
+    </select>
+    <svg style="pointer-events:none;position:absolute;right:16px;top:50%;transform:translateY(-50%);width:14px;height:8px" viewBox="0 0 12 8" fill="none" aria-hidden="true">
+      <path d="M1 1.5L6 6.5L11 1.5" stroke="#A8A29E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+  </span>
+  <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+    <span style="margin-top:6px;display:block;font-size:12px;color:#f87171;font-family:'Poppins',sans-serif">{{ error }}</span>
+  </sc-if>
+</label>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:360,&quot;height&quot;:90},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Label&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;value&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(v:string)=&gt;void&quot;},&quot;options&quot;:{&quot;editor&quot;:null,&quot;default&quot;:[],&quot;tsType&quot;:&quot;string[]&quot;},&quot;error&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;required&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Select…&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  handleChange = (e) => {
+    if (this.props.onChange) this.props.onChange(e.target.value);
+  };
+  renderVals() {
+    const error = this.props.error;
+    const selectStyle = `width:100%;font-family:'Poppins',sans-serif;font-size:14px;border-radius:12px;padding:12px 40px 12px 16px;outline:none;appearance:none;background:rgba(255,255,255,0.04);border:1px solid ${error ? '#f87171' : 'rgba(255,255,255,0.08)'};color:#FAFAF8;box-sizing:border-box`;
+    return {
+      label: this.props.label,
+      required: !!this.props.required,
+      value: this.props.value ?? '',
+      placeholder: this.props.placeholder ?? 'Select…',
+      options: this.props.options ?? [],
+      fieldId: this.props.id ?? this.props.name ?? ('f' + Math.random().toString(36).slice(2)),
+      error: error ?? '',
+      selectStyle,
+      handleChange: this.handleChange,
+    };
+  }
+}
+</script>
+</body>
+</html>

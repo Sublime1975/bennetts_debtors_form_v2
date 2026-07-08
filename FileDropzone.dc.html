@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<div>
+  <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.03em;color:#A8A29E">{{ label }}<sc-if value="{{ required }}" hint-placeholder-val="{{ false }}"><span style="color:#E3B679"> *</span></sc-if><sc-if value="{{ showOptional }}" hint-placeholder-val="{{ false }}"><span style="margin-left:8px;display:inline-block;border-radius:9999px;padding:2px 8px;font-size:10px;vertical-align:middle;background:rgba(255,255,255,0.06);color:#A8A29E">Optional</span></sc-if></span>
+
+  <sc-if value="{{ hasValue }}" hint-placeholder-val="{{ false }}">
+    <div style="{{ successCardStyle }}">
+      <div style="{{ accentBarStyle }}"></div>
+      <div style="position:relative;flex-shrink:0">
+        <sc-if value="{{ previewUrl }}" hint-placeholder-val="{{ false }}">
+          <img src="{{ previewUrl }}" alt="" style="width:48px;height:48px;border-radius:10px;object-fit:cover;display:block;border:1px solid rgba(255,255,255,0.1)" />
+        </sc-if>
+        <sc-if value="{{ previewUrl }}" hint-placeholder-val="{{ true }}">
+          <div style="width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(150deg,#C9863F33,#E3B67922);border:1px solid #C9863F44">
+            <span style="font-family:'Poppins',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.04em;color:#E3B679">{{ typeBadge }}</span>
+          </div>
+        </sc-if>
+        <div style="position:absolute;bottom:-4px;right:-4px;width:18px;height:18px;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#C9863F,#E3B679);border:2px solid #1C1B19">
+          <svg viewBox="0 0 16 16" style="width:9px;height:9px" fill="none" aria-hidden="true"><path d="M3 8l3.5 3.5L13 5" stroke="#141413" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </div>
+      </div>
+      <div style="min-width:0;flex:1">
+        <p style="font-family:'Poppins',sans-serif;font-size:14px;color:#FAFAF8;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ fileName }}</p>
+        <p style="font-family:'Poppins',sans-serif;font-size:12px;margin:3px 0 0;color:#A8A29E">{{ fileSizeLabel }} · Uploaded</p>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
+        <label for="{{ fieldId }}" style="font-family:'Poppins',sans-serif;font-size:12px;font-weight:500;color:#E3B679;cursor:pointer;padding:6px 10px;border-radius:9999px;background:rgba(201,134,63,0.12);border:1px solid rgba(201,134,63,0.3)">
+          Replace
+          <input id="{{ fieldId }}" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" onChange="{{ onInputChange }}" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden" />
+        </label>
+        <button type="button" onClick="{{ clearFile }}" style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:#A8A29E;cursor:pointer;font-size:14px;border-radius:9999px" aria-label="Remove file">✕</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ noValue }}" hint-placeholder-val="{{ true }}">
+    <label for="{{ fieldId }}" onDragOver="{{ onDragOver }}" onDragLeave="{{ onDragLeave }}" onDrop="{{ onDrop }}" style="{{ dropStyle }}">
+      <div style="{{ iconRingStyle }}">
+        <svg viewBox="0 0 24 24" style="width:20px;height:20px" fill="none" aria-hidden="true">
+          <path d="M12 16V5M12 5L7 10M12 5l5 5" stroke="#141413" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M5 16.5V18a2 2 0 002 2h10a2 2 0 002-2v-1.5" stroke="#141413" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+      <p style="font-family:'Poppins',sans-serif;font-size:14px;font-weight:500;color:#FAFAF8;margin:14px 0 3px;text-align:center">{{ dropText }}</p>
+      <p style="font-family:'Poppins',sans-serif;font-size:12px;margin:0 0 12px;color:#A8A29E;text-align:center">or click to browse · max 10MB</p>
+      <div style="display:flex;gap:6px">
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.03em;padding:3px 9px;border-radius:9999px;background:rgba(255,255,255,0.06);color:#A8A29E">PDF</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.03em;padding:3px 9px;border-radius:9999px;background:rgba(255,255,255,0.06);color:#A8A29E">JPG</span>
+        <span style="font-family:'Poppins',sans-serif;font-size:10px;font-weight:600;letter-spacing:0.03em;padding:3px 9px;border-radius:9999px;background:rgba(255,255,255,0.06);color:#A8A29E">PNG</span>
+      </div>
+      <input id="{{ fieldId }}" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" onChange="{{ onInputChange }}" style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden" />
+    </label>
+  </sc-if>
+
+  <sc-if value="{{ displayError }}" hint-placeholder-val="{{ false }}">
+    <span style="margin-top:6px;display:block;font-size:12px;color:#f87171;font-family:'Poppins',sans-serif">{{ displayError }}</span>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:420,&quot;height&quot;:140},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Document&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;value&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;object|null&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(v:object|null)=&gt;void&quot;},&quot;error&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;required&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;id&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;file&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+const ALLOWED_FILE_TYPES = ["application/pdf", "image/jpeg", "image/png"];
+const TYPE_BADGES = { "application/pdf": "PDF", "image/jpeg": "JPG", "image/png": "PNG" };
+
+class Component extends DCLogic {
+  state = { dragActive: false, localError: null, previewUrl: null };
+
+  formatSize(bytes) {
+    if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + 'KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + 'MB';
+  }
+
+  acceptFile = (file) => {
+    if (!file) return;
+    if (file.size > MAX_FILE_SIZE_BYTES) {
+      this.setState({ localError: 'File must be 10MB or smaller' });
+      return;
+    }
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      this.setState({ localError: 'File must be a PDF, JPG or PNG' });
+      return;
+    }
+    this.setState({ localError: null });
+    if (this.state.previewUrl) URL.revokeObjectURL(this.state.previewUrl);
+    const previewUrl = file.type.startsWith('image/') ? URL.createObjectURL(file) : null;
+    this.setState({ previewUrl });
+    if (this.props.onChange) this.props.onChange({ name: file.name, size: file.size, type: file.type });
+  };
+
+  onInputChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    this.acceptFile(file);
+  };
+
+  onDragOver = (e) => { e.preventDefault(); this.setState({ dragActive: true }); };
+  onDragLeave = () => { this.setState({ dragActive: false }); };
+  onDrop = (e) => {
+    e.preventDefault();
+    this.setState({ dragActive: false });
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    this.acceptFile(file);
+  };
+  clearFile = () => {
+    if (this.state.previewUrl) URL.revokeObjectURL(this.state.previewUrl);
+    this.setState({ localError: null, previewUrl: null });
+    if (this.props.onChange) this.props.onChange(null);
+  };
+
+  componentWillUnmount() {
+    if (this.state.previewUrl) URL.revokeObjectURL(this.state.previewUrl);
+  }
+
+  renderVals() {
+    const value = this.props.value ?? null;
+    const dragActive = this.state.dragActive;
+    const displayError = this.state.localError ?? this.props.error ?? '';
+    const dropStyle = `position:relative;margin-top:8px;border-radius:16px;padding:28px 20px;display:flex;flex-direction:column;align-items:center;cursor:pointer;box-sizing:border-box;transition:all .2s;background:${dragActive ? 'rgba(201,134,63,0.08)' : 'rgba(255,255,255,0.03)'};border:1.5px dashed ${dragActive ? '#C9863F' : (displayError ? '#f87171' : 'rgba(201,134,63,0.35)')};${dragActive ? 'transform:scale(1.01);box-shadow:0 0 0 4px rgba(201,134,63,0.12)' : ''}`;
+    const iconRingStyle = `width:52px;height:52px;border-radius:9999px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#C9863F,#E3B679);box-shadow:0 0 0 6px rgba(201,134,63,0.1)${dragActive ? ',0 0 24px 2px rgba(201,134,63,0.5)' : ''}`;
+    const successCardStyle = `position:relative;overflow:hidden;margin-top:8px;border-radius:16px;padding:16px 16px 16px 20px;display:flex;align-items:center;gap:14px;box-sizing:border-box;background:linear-gradient(150deg,rgba(201,134,63,0.08),rgba(255,255,255,0.03));border:1px solid rgba(201,134,63,0.3)`;
+    const accentBarStyle = `position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#C9863F,#E3B679)`;
+    return {
+      label: this.props.label,
+      required: !!this.props.required,
+      showOptional: !this.props.required,
+      hasValue: !!value,
+      noValue: !value,
+      fileName: value ? value.name : '',
+      fileSizeLabel: value ? this.formatSize(value.size) : '',
+      typeBadge: value ? (TYPE_BADGES[value.type] || 'FILE') : '',
+      previewUrl: this.state.previewUrl,
+      dropText: dragActive ? 'Drop it here' : 'Drag & drop your file here',
+      fieldId: this.props.id ?? ('fd' + Math.random().toString(36).slice(2)),
+      dropStyle,
+      iconRingStyle,
+      successCardStyle,
+      accentBarStyle,
+      displayError,
+      onInputChange: this.onInputChange,
+      onDragOver: this.onDragOver,
+      onDragLeave: this.onDragLeave,
+      onDrop: this.onDrop,
+      clearFile: this.clearFile,
+    };
+  }
+}
+</script>
+</body>
+</html>

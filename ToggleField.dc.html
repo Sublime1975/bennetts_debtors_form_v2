@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<div>
+  <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.03em;color:#A8A29E">{{ label }}<sc-if value="{{ required }}" hint-placeholder-val="{{ false }}"><span style="color:#E3B679"> *</span></sc-if></span>
+  <div style="margin-top:8px;display:flex;gap:8px;border-radius:12px;padding:4px;background:rgba(255,255,255,0.04)">
+    <button type="button" onClick="{{ selectFalse }}" style="{{ falseStyle }}">{{ falseLabel }}</button>
+    <button type="button" onClick="{{ selectTrue }}" style="{{ trueStyle }}">{{ trueLabel }}</button>
+  </div>
+  <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+    <span style="margin-top:6px;display:block;font-size:12px;color:#f87171;font-family:'Poppins',sans-serif">{{ error }}</span>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:360,&quot;height&quot;:90},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Label&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;value&quot;:{&quot;editor&quot;:null,&quot;default&quot;:null,&quot;tsType&quot;:&quot;boolean|null&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(v:boolean)=&gt;void&quot;},&quot;error&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;required&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;trueLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Yes&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;falseLabel&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;No&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  selectFalse = () => { if (this.props.onChange) this.props.onChange(false); };
+  selectTrue = () => { if (this.props.onChange) this.props.onChange(true); };
+  renderVals() {
+    const value = this.props.value ?? null;
+    const baseBtn = 'flex:1;border-radius:8px;padding:10px 0;font-size:14px;font-family:\'Poppins\',sans-serif;border:none;cursor:pointer;transition:all .2s;';
+    const falseStyle = `${baseBtn}background:${value === false ? '#C9863F' : 'transparent'};color:${value === false ? '#141413' : '#A8A29E'}`;
+    const trueStyle = `${baseBtn}background:${value === true ? '#C9863F' : 'transparent'};color:${value === true ? '#141413' : '#A8A29E'}`;
+    return {
+      label: this.props.label,
+      required: !!this.props.required,
+      trueLabel: this.props.trueLabel ?? 'Yes',
+      falseLabel: this.props.falseLabel ?? 'No',
+      error: this.props.error ?? '',
+      falseStyle,
+      trueStyle,
+      selectFalse: this.selectFalse,
+      selectTrue: this.selectTrue,
+    };
+  }
+}
+</script>
+</body>
+</html>

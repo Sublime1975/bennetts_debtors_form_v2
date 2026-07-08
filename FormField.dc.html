@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+
+<label style="display:block" for="{{ fieldId }}">
+  <span style="font-family:'Poppins',sans-serif;font-size:12px;letter-spacing:0.03em;color:#A8A29E">{{ label }}<sc-if value="{{ required }}" hint-placeholder-val="{{ false }}"><span style="color:#E3B679"> *</span></sc-if></span>
+  <span style="position:relative;display:block;margin-top:8px">
+    <sc-if value="{{ prefix }}" hint-placeholder-val="{{ false }}">
+      <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);font-family:'Poppins',sans-serif;font-size:14px;color:#A8A29E;pointer-events:none">{{ prefix }}</span>
+    </sc-if>
+    <input id="{{ fieldId }}" name="{{ name }}" type="{{ type }}" value="{{ value }}" placeholder="{{ placeholder }}" maxlength="{{ maxLength }}" inputmode="{{ inputMode }}" onChange="{{ handleChange }}" onBlur="{{ handleBlur }}" style="{{ inputStyle }}" />
+  </span>
+  <sc-if value="{{ error }}" hint-placeholder-val="{{ false }}">
+    <span style="margin-top:6px;display:block;font-size:12px;color:#f87171;font-family:'Poppins',sans-serif">{{ error }}</span>
+  </sc-if>
+</label>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:360,&quot;height&quot;:90},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Label&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;value&quot;:{&quot;editor&quot;:null,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(v:string)=&gt;void&quot;},&quot;error&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;required&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;type&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;text&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;prefix&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  handleChange = (e) => {
+    if (this.props.onChange) this.props.onChange(e.target.value);
+  };
+  handleBlur = (e) => {
+    if (this.props.onBlur) this.props.onBlur(e.target.value);
+  };
+  renderVals() {
+    const error = this.props.error;
+    const prefix = this.props.prefix ?? '';
+    const leftPad = prefix ? (16 + prefix.length * 8 + 6) : 16;
+    const inputStyle = `width:100%;font-family:'Poppins',sans-serif;font-size:14px;border-radius:12px;padding:12px 16px 12px ${leftPad}px;outline:none;background:rgba(255,255,255,0.04);border:1px solid ${error ? '#f87171' : 'rgba(255,255,255,0.08)'};color:#FAFAF8;box-sizing:border-box;transition:border-color .2s`;
+    return {
+      label: this.props.label,
+      required: !!this.props.required,
+      prefix,
+      value: this.props.value ?? '',
+      placeholder: this.props.placeholder ?? '',
+      type: this.props.type ?? 'text',
+      maxLength: this.props.maxLength ?? undefined,
+      inputMode: this.props.inputMode ?? undefined,
+      name: this.props.name ?? '',
+      fieldId: this.props.id ?? this.props.name ?? ('f' + Math.random().toString(36).slice(2)),
+      error: error ?? '',
+      inputStyle,
+      handleChange: this.handleChange,
+      handleBlur: this.handleBlur,
+    };
+  }
+}
+</script>
+</body>
+</html>
