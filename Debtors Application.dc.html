@@ -158,7 +158,7 @@
         <dc-import name="SelectField" label="Country" required="{{ true }}" placeholder="Select country" options="{{ countries }}" value="{{ contact.country }}" onChange="{{ contactCountryChange }}" error="{{ errors.country }}" hint-size="100%,86px"></dc-import>
         <dc-import name="CheckboxField" label="Postal address same as physical" checked="{{ contact.accountsPostalSameAsPhysical }}" onChange="{{ contactAccountsPostalSameChange }}" hint-size="100%,46px"></dc-import>
         <sc-if value="{{ contactAccountsPostalDifferent }}" hint-placeholder-val="{{ false }}">
-          <dc-import name="AddressField" id="accountsPostalAddress" label="Postal address" value="{{ contact.accountsPostalAddress }}" onChange="{{ contactAccountsPostalAddressChange }}" countryCode="{{ contactCountryCode }}" hint-size="100%,86px"></dc-import>
+          <dc-import name="AddressField" id="accountsPostalAddress" label="Postal address" required="{{ true }}" value="{{ contact.accountsPostalAddress }}" onChange="{{ contactAccountsPostalAddressChange }}" error="{{ errors.accountsPostalAddress }}" countryCode="{{ contactCountryCode }}" hint-size="100%,86px"></dc-import>
         </sc-if>
         <dc-import name="CheckboxField" label="Buyer/Procurement contact is different from above" checked="{{ contact.buyerContactDifferent }}" onChange="{{ contactBuyerDifferentChange }}" hint-size="100%,46px"></dc-import>
         <sc-if value="{{ contact.buyerContactDifferent }}" hint-placeholder-val="{{ false }}">
@@ -643,7 +643,17 @@ const BBEE_LEVELS = ["Level 1","Level 2","Level 3","Level 4","Level 5","Level 6"
 const ACCOUNT_TYPES = ["Current/Cheque","Savings"];
 const COUNTRIES = ["South Africa","Afghanistan","Albania","Algeria","Angola","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahrain","Bangladesh","Belarus","Belgium","Belize","Benin","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Chad","Chile","China","Colombia","Democratic Republic of the Congo","Republic of the Congo","Costa Rica","Croatia","Cuba","Cyprus","Czech Republic","Denmark","Djibouti","Dominican Republic","Ecuador","Egypt","El Salvador","Eritrea","Estonia","Eswatini","Ethiopia","Fiji","Finland","France","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Guatemala","Guinea","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Ivory Coast","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Lithuania","Luxembourg","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Mauritania","Mauritius","Mexico","Moldova","Monaco","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nepal","Netherlands","New Zealand","Nicaragua","Niger","Nigeria","North Korea","North Macedonia","Norway","Oman","Pakistan","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Qatar","Romania","Russia","Rwanda","Saudi Arabia","Senegal","Serbia","Sierra Leone","Singapore","Slovakia","Slovenia","Somalia","South Korea","South Sudan","Spain","Sri Lanka","Sudan","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Togo","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Venezuela","Vietnam","Yemen","Zambia","Zimbabwe"];
 
+// Reject consecutive dots, spaces, and missing domain labels (e.g. a@b..com, a@b).
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const isValidEmail = (email) => {
+  const value = String(email || "").trim();
+  if (!EMAIL_RE.test(value)) return false;
+  if (value.includes("..")) return false;
+  const [local, domain] = value.split("@");
+  if (!local || !domain) return false;
+  if (local.startsWith(".") || local.endsWith(".") || domain.startsWith(".") || domain.endsWith(".")) return false;
+  return domain.split(".").every((part) => part.length > 0);
+};
 const SA_PHONE_RE = /^(\+27|0)[1-9]\d{8}$/;
 const GENERIC_PHONE_RE = /^\+?[1-9]\d{7,14}$/;
 const SA_ID_RE = /^\d{13}$/;
@@ -716,7 +726,8 @@ class Component extends DCLogic {
     if (!value || String(value).trim() === "") errors[key] = message || "This field is required";
   }
   isPhoneValid(phone, isLocal) {
-    const stripped = phone.replace(/[\s-]/g, "");
+    // Strip spaces, hyphens, and parentheses so (082) 123-4567 validates like 0821234567.
+    const stripped = phone.replace(/[\s\-()]/g, "");
     return isLocal ? SA_PHONE_RE.test(stripped) : SA_PHONE_RE.test(stripped) || GENERIC_PHONE_RE.test(stripped);
   }
 
@@ -794,16 +805,19 @@ class Component extends DCLogic {
     const isLocalContact = contact.country === "South Africa" || contact.country === "";
     this.requireField(errors, "accountsContactName", contact.accountsContactName);
     this.requireField(errors, "accountsEmail", contact.accountsEmail);
-    if (contact.accountsEmail && !EMAIL_RE.test(contact.accountsEmail)) errors.accountsEmail = "Enter a valid email address";
+    if (contact.accountsEmail && !isValidEmail(contact.accountsEmail)) errors.accountsEmail = "Enter a valid email address";
     this.requireField(errors, "accountsPhone", contact.accountsPhone);
     if (contact.accountsPhone && !this.isPhoneValid(contact.accountsPhone, isLocalContact)) errors.accountsPhone = isLocalContact ? "Enter a valid South African phone number" : "Enter a valid phone number";
     if (contact.accountsCell && !this.isPhoneValid(contact.accountsCell, isLocalContact)) errors.accountsCell = isLocalContact ? "Enter a valid South African cell number" : "Enter a valid cell number";
     this.requireField(errors, "accountsPhysicalAddress", contact.accountsPhysicalAddress);
     this.requireField(errors, "country", contact.country, "Select a country");
+    if (!contact.accountsPostalSameAsPhysical) {
+      this.requireField(errors, "accountsPostalAddress", contact.accountsPostalAddress, "Enter a postal address");
+    }
     if (contact.buyerContactDifferent) {
       this.requireField(errors, "buyerContactName", contact.buyerContactName);
       this.requireField(errors, "buyerEmail", contact.buyerEmail);
-      if (contact.buyerEmail && !EMAIL_RE.test(contact.buyerEmail)) errors.buyerEmail = "Enter a valid email address";
+      if (contact.buyerEmail && !isValidEmail(contact.buyerEmail)) errors.buyerEmail = "Enter a valid email address";
       this.requireField(errors, "buyerPhone", contact.buyerPhone);
       if (contact.buyerPhone && !this.isPhoneValid(contact.buyerPhone, isLocalContact)) errors.buyerPhone = isLocalContact ? "Enter a valid South African phone number" : "Enter a valid phone number";
       if (contact.buyerCell && !this.isPhoneValid(contact.buyerCell, isLocalContact)) errors.buyerCell = isLocalContact ? "Enter a valid South African cell number" : "Enter a valid cell number";
@@ -837,7 +851,7 @@ class Component extends DCLogic {
       this.requireField(errors, `${key}.phone`, ref.phone);
       if (ref.phone && !this.isPhoneValid(ref.phone, false)) errors[`${key}.phone`] = "Enter a valid phone number";
       this.requireField(errors, `${key}.email`, ref.email);
-      if (ref.email && !EMAIL_RE.test(ref.email)) errors[`${key}.email`] = "Enter a valid email address";
+      if (ref.email && !isValidEmail(ref.email)) errors[`${key}.email`] = "Enter a valid email address";
     });
     return errors;
   }
