@@ -1,0 +1,16 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public credit applications: create-only from the form UI.
+    // Staff review via Firebase Console / Admin SDK. No client reads.
+    match /applications/{appId} {
+      allow create: if request.resource.data.keys().hasAll(['referenceNumber', 'createdAt', 'company', 'contact'])
+        && request.resource.data.referenceNumber is string
+        && request.resource.data.referenceNumber.size() <= 40
+        && request.resource.data.company.tradingName is string
+        && request.resource.data.company.tradingName.size() > 0
+        && request.resource.data.company.tradingName.size() <= 200;
+      allow read, update, delete: if false;
+    }
+  }
+}

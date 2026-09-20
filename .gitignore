@@ -1,1 +1,13 @@
+# Firebase / local secrets (keep placeholder config.js; ignore real overrides if you use .local)
+public/firebase-config.local.js
+functions/.env
+functions/.env.*
+.runtimeconfig.json
+*-firebase-adminsdk-*.json
+serviceAccount*.json
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+functions/node_modules/
 desktop.ini

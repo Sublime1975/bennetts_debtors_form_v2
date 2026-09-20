@@ -1,0 +1,13 @@
+{
+  "name": "bennetts-debtors-functions",
+  "description": "Email notify on new debtor applications via Resend free tier",
+  "engines": { "node": "20" },
+  "main": "index.js",
+  "type": "commonjs",
+  "private": true,
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "firebase-functions": "^6.0.0",
+    "resend": "^4.0.0"
+  }
+}
