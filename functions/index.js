@@ -15,8 +15,10 @@ const { Resend } = require("resend");
 initializeApp();
 
 const resendApiKey = defineSecret("RESEND_API_KEY");
-const notifyEmail = defineString("NOTIFY_EMAIL", { default: "" });
-const fromEmail = defineString("FROM_EMAIL", { default: "Bennett's Engineering <onboarding@resend.dev>" });
+const notifyEmail = defineString("NOTIFY_EMAIL");
+const fromEmail = defineString("FROM_EMAIL", {
+  default: "Bennett's Engineering <onboarding@resend.dev>",
+});
 
 exports.onApplicationCreated = onDocumentCreated(
   {
