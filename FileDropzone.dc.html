@@ -93,7 +93,8 @@ class Component extends DCLogic {
     if (this.state.previewUrl) URL.revokeObjectURL(this.state.previewUrl);
     const previewUrl = file.type.startsWith('image/') ? URL.createObjectURL(file) : null;
     this.setState({ previewUrl });
-    if (this.props.onChange) this.props.onChange({ name: file.name, size: file.size, type: file.type });
+    // Keep the real File so Firebase Storage can upload bytes on submit.
+    if (this.props.onChange) this.props.onChange({ name: file.name, size: file.size, type: file.type, file });
   };
 
   onInputChange = (e) => {

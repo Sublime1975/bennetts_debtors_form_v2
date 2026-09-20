@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js"></script>
+<script src="./public/firebase-config.js"></script>
+<script src="./public/firebase-submit.js"></script>
 </head>
 <body>
 <x-dc>
@@ -584,8 +589,11 @@
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;margin-top:40px">
         <button onClick="{{ goBack }}" style="font-family:'Poppins',sans-serif;font-size:14px;display:flex;align-items:center;gap:4px;color:#A8A29E;background:none;border:none;cursor:pointer;padding:0">‹ Back</button>
-        <button onClick="{{ handleSubmit }}" disabled="{{ submitDisabled }}" style="{{ submitButtonStyle }}">Submit application</button>
+        <button onClick="{{ handleSubmit }}" disabled="{{ submitDisabled }}" style="{{ submitButtonStyle }}">{{ submitLabel }}</button>
       </div>
+      <sc-if value="{{ submitError }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:16px 0 0;font-family:'Poppins',sans-serif;font-size:13px;color:#f87171;text-align:right">{{ submitError }}</p>
+      </sc-if>
     </div>
   </div>
   </sc-if>
@@ -691,6 +699,8 @@ class Component extends DCLogic {
     formData: initialFormData(),
     errors: {},
     referenceNumber: null,
+    isSubmitting: false,
+    submitError: "",
   };
 
   updateSection(section, patch) {
@@ -718,7 +728,7 @@ class Component extends DCLogic {
     this.goToStep(STEP_ORDER[Math.max(idx - 1, 0)]);
   };
   resetForm = () => {
-    this.setState({ formData: initialFormData(), errors: {}, referenceNumber: null, currentStep: "welcome" });
+    this.setState({ formData: initialFormData(), errors: {}, referenceNumber: null, currentStep: "welcome", isSubmitting: false, submitError: "" });
     if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -967,18 +977,40 @@ class Component extends DCLogic {
   handleNextDocuments = () => { const e = this.validateDocuments(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
   handleNextCredit = () => { const e = this.validateCredit(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
   handleNextSuretyship = () => { const e = this.validateSuretyship(); this.setState({ errors: e }); if (Object.keys(e).length === 0) this.goNext(); };
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const e = this.validateDeclarationAndConsent();
-    this.setState({ errors: e });
-    if (Object.keys(e).length === 0) {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      const digits = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
-      const ref = `BE-${y}${m}${day}-${digits}`;
+    this.setState({ errors: e, submitError: "" });
+    if (Object.keys(e).length !== 0) return;
+    if (this.state.isSubmitting) return;
+
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const digits = String(Math.floor(Math.random() * 10000)).padStart(4, "0");
+    const ref = `BE-${y}${m}${day}-${digits}`;
+
+    const submitApi = typeof window !== "undefined" ? window.BennettsFirebaseSubmit : null;
+    const useFirebase = submitApi && submitApi.isConfigured && submitApi.isConfigured();
+
+    if (!useFirebase) {
+      // Local / design-preview mode when Firebase keys are not set yet.
       this.setState({ referenceNumber: ref });
       this.goToStep("confirmation");
+      return;
+    }
+
+    this.setState({ isSubmitting: true, submitError: "", referenceNumber: ref });
+    try {
+      await submitApi.submitApplication({ formData: this.state.formData, referenceNumber: ref });
+      this.setState({ isSubmitting: false });
+      this.goToStep("confirmation");
+    } catch (err) {
+      console.error(err);
+      this.setState({
+        isSubmitting: false,
+        submitError: (err && err.message) ? err.message : "Could not submit application. Please try again.",
+      });
     }
   };
 
@@ -990,7 +1022,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { currentStep, formData, errors, referenceNumber } = this.state;
+    const { currentStep, formData, errors, referenceNumber, isSubmitting, submitError } = this.state;
     const { company, contact, directors, references, tax, banking, documents, credit, declaration, consent } = formData;
     const stepIndex = DATA_STEPS.indexOf(currentStep);
 
@@ -1121,8 +1153,9 @@ class Component extends DCLogic {
       ])) },
     ];
 
-    const submitDisabled = !consent.accurateInfo || !consent.popiConsent;
+    const submitDisabled = !consent.accurateInfo || !consent.popiConsent || !!isSubmitting;
     const submitButtonStyle = `font-family:'Poppins',sans-serif;font-weight:500;font-size:14px;border-radius:9999px;padding:14px 24px;background:linear-gradient(135deg,#C9863F,#E3B679);color:#141413;border:none;box-shadow:0 4px 20px -4px #C9863F66;${submitDisabled ? "opacity:0.4;cursor:not-allowed" : "cursor:pointer"}`;
+    const submitLabel = isSubmitting ? "Submitting…" : "Submit application";
 
     return {
       isWelcome: currentStep === "welcome",
@@ -1275,6 +1308,8 @@ class Component extends DCLogic {
       bbeeCertLabel: tax.bbeeLevel === "Non-compliant" ? "B-BBEE non-compliance certificate" : "B-BBEE Certificate or Affidavit",
       paymentTermsOptions: ["Cash on Delivery", "7 Days from Delivery", "30 Days from statement", "60 Days from statement"],
       submitDisabled,
+      submitLabel,
+      submitError: submitError || "",
       submitButtonStyle,
       referenceNumberDisplay: referenceNumber ?? "—",
     };
